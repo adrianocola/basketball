@@ -46,6 +46,7 @@ head
                 //scripts
                 "jquery": "/scripts/vendor/jquery",
                 "jquery-ui": "/scripts/vendor/jquery-ui",
+                "jquery-ui.touch": "/scripts/vendor/jquery-ui.touch",
                 "jquery.form": "/scripts/vendor/jquery.form",
                 "jquery.easing": "/scripts/vendor/jquery.easing",
                 "jquery.inputmask": "/scripts/vendor/jquery.inputmask",
@@ -92,6 +93,9 @@ head
                 },
                 'jquery-ui':{
                     deps: ['jquery']
+                },
+                'jquery-ui.touch':{
+                    deps: ['jquery','jquery-ui']
                 },
                 'jquery.form':{
                     deps: ['jquery']

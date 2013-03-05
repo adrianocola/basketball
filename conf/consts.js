@@ -4,6 +4,7 @@ module.exports = {
         //scripts
         "jquery": "vendor/jquery",
         "jquery-ui": "vendor/jquery-ui",
+        "jquery-ui.touch": "vendor/jquery-ui.touch",
         "jquery.form": "vendor/jquery.form",
         "jquery.easing": "vendor/jquery.easing",
         "jquery.inputmask": "vendor/jquery.inputmask",
@@ -47,6 +48,9 @@ module.exports = {
         },
         'jquery-ui':{
             deps: ['jquery']
+        },
+        'jquery-ui.touch':{
+            deps: ['jquery','jquery-ui']
         },
         'jquery.form':{
             deps: ['jquery']

@@ -35,7 +35,9 @@ define(['jquery',
             },
             oShots: {
 
-            }
+            },
+            options: {}
+
         }
 
     });

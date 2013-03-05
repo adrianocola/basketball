@@ -2,11 +2,18 @@
     <div class="team mTeam">
 
     </div>
+
+    <button class="all selected buttonOrange">TODOS</button>
+    <br>
+    <div class="controls">
+        <input id="checkSides" type="checkbox" <%= game.options.sides?'checked="checked"':'' %>/> Desconsiderar mudança de lado
+    </div>
+
     <div class="buttons">
-        <button class="pre">Pré</button>
-        <button class="in">Jogo</button>
-        <button class="pos">Pós</button>
-        <button class="back">↑</button>
+        <button class="pre buttonOrange">Pré</button>
+        <button class="in buttonOrange">Jogo</button>
+        <button class="pos buttonOrange selected">Pós</button>
+        <button class="back buttonOrange">↑</button>
     </div>
 </div>
 <div id="mid">
@@ -20,4 +27,6 @@
     <div class="team oTeam">
 
     </div>
+
+    <button class="all selected buttonOrange">TODOS</button>
 </div>

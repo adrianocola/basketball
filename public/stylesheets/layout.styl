@@ -80,7 +80,9 @@ em
 //************************
 
 #top .buttons
-    float: right
+    position: absolute
+    top: 20px
+    right: 0
 
 //************************
 //******* PRE GAME *******
@@ -152,13 +154,16 @@ em
     height: 30px
     text-align: center
     line-height: 30px
-    font-size: 18px
+    font-size: 16px
     font-weight: bold
     position: absolute
     background-color: white
+    user-select: none
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.5)
 
 .token.opp
     background-color: #ccc
+    border: 1px solid red
 
 #mid .token:hover:not(.ui-draggable-dragging)
     transition: all .2s;
@@ -174,6 +179,47 @@ em
 #top .token, #bot .token
     z-index: 10
 
+.token.color0
+    color: rgb(255,0,0)
+
+.token.color1
+    color: rgb(43,100,20)
+
+.token.color2
+    color: rgb(46,111,253)
+
+.token.color3
+    color: rgb(253,154,0)
+
+.token.color4
+    color: rgb(0,0,0)
+
+.token.color5
+    color: rgb(164,0,0)
+
+.token.color6
+    color: rgb(85,142,40)
+
+.token.color7
+    color: rgb(0,45,153)
+
+.token.color8
+    color: rgb(77,0,105)
+
+.token.color9
+    color: rgb(62,69,5)
+
+.token.color10
+    color: rgb(41,0,130)
+
+.token.color11
+    color: rgb(200,32,103)
+
+.token.disabled
+    color: rgb(205,205,205)
+    background-color: rgb(153,153,153)
+    border: 1px solid black
+
 //************************
 //******** IN GAME *******
 //************************
@@ -185,6 +231,10 @@ em
 #ingame #bot .title
     display: inline-block
     font-size: 16px
+
+#ingame .team
+    display: inline-block
+
 
 #ingame .team .token
     position: relative
@@ -198,6 +248,9 @@ em
     width: 20px
     height: 20px
     min-width: 20px
+
+#ingame .token
+    cursor: move
 
 #ingame .oTeam
     float: right
@@ -214,8 +267,8 @@ em
     display: inline-block
     font-size: 16px
 
-#ingame .team
-    display: block
+#posgame .team
+    display: inline-block
 
 #posgame .team .token
     position: relative
@@ -224,3 +277,6 @@ em
 
 #posgame .oTeam
     float: right
+
+#posgame #bot .all
+    float:right

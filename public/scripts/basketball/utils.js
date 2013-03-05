@@ -20,6 +20,10 @@ define([
         return '_' + Math.random().toString(36).substr(2, 9);
     };
 
+    module.sortByProp = function(vet, prop){
+        return vet.sort(function(a, b) {return a[prop] - b[prop]})
+    }
+
     module.isNumber = function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     };

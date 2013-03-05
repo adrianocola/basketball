@@ -14,6 +14,7 @@ define(['jquery',
     'text!templates/player_token.html',
     'text!templates/error.html',
     'jquery-ui',
+    'jquery-ui.touch',
     'jquery.inputmask',
     'jquery.inputmask.date'],
     function($,
@@ -112,7 +113,6 @@ define(['jquery',
                     this.model = this.collection.create();
                 }else{
                     this.model = this.collection.get(this.gameId);
-                    //fazer fetch (do local storage ou do server, sei lá)
                 }
             },
 
@@ -165,10 +165,14 @@ define(['jquery',
                 'keyup #top .editTitle': 'updateTitle',
                 'dblclick #top .date': 'editDate',
                 'click .add': 'addPlayer',
-                'click .back': 'back',
                 'click .buttons .in': 'gotoIn',
-                'click .buttons .pos': 'gotoPos'
+                'click .buttons .pos': 'gotoPos',
+                'click .back': 'back'
 
+            },
+
+            back: function(){
+                Backbone.history.navigate('/', true);
             },
 
             gotoIn: function(){
@@ -214,8 +218,13 @@ define(['jquery',
 
             },
 
-            back: function(){
-                Backbone.history.navigate('/', true);
+            addUtil: function(my){
+
+                var playerView = new PlayerItem({model: {num: 0, name: '', position: 0}, pid: Utils.uniqueId()});
+                playerView.on('edit',this.edited);
+                playerView.on('remove',this.removed);
+                this.$((my?'.playersContainerLeft':'.playersContainerRight') + ' .playerTable tbody').append(playerView.render().el);
+
             },
 
             addPlayer: function(evt){
@@ -223,15 +232,9 @@ define(['jquery',
 
                 //verifica se está adicionado nos meus jogadores
                 if(this.$('.playersContainerLeft').find(element).length){
-                    var playerView = new PlayerItem({model: {id: Utils.uniqueId(), num: 0, name: '', position: 0}});
-                    playerView.on('edit',this.edited);
-                    playerView.on('remove',this.removed);
-                    this.$('.playersContainerLeft .playerTable tbody').append(playerView.render().el);
+                    this.addUtil(true);
                 }else{
-                    var playerView = new PlayerItem({model: {id: Utils.uniqueId(), num: 0, name: '', position: 0}});
-                    playerView.on('edit',this.edited);
-                    playerView.on('remove',this.removed);
-                    this.$('.playersContainerRight .playerTable tbody').append(playerView.render().el);
+                    this.addUtil(false);
                 }
             },
 
@@ -246,7 +249,13 @@ define(['jquery',
 
                 var players = this.model.get(teamStr);
 
-                players[playerView.model.id] = playerView.model;
+                if(playerView.pid){
+                    players[playerView.pid] = playerView.model;
+                }else{
+                    playerView.pid = Utils.uniqueId();
+                    players[playerView.pid] = playerView.model;
+                }
+
 
                 this.model.set(teamStr,players);
                 this.save();
@@ -287,19 +296,27 @@ define(['jquery',
 
                 this.$el.html(this.template({game: game, moment: moment}));
 
-                _.each(game.mTeam,function(player){
-                    var playerView = new PlayerItem({model: player});
+
+                _.each(Utils.sortByProp(_.values(game.mTeam),'num'),function(player, pid){
+                    var playerView = new PlayerItem({model: player, pid: pid});
                     playerView.on('edit',that.edited);
                     playerView.on('remove',that.removed);
                     that.$('.playersContainerLeft .playerTable tbody').append(playerView.render().el);
                 });
+                for(var i=_.size(game.mTeam);i<12;i++){
+                    that.addUtil(true);
+                };
 
-                _.each(game.oTeam,function(player){
-                    var playerView = new PlayerItem({model: player});
+                _.each(Utils.sortByProp(_.values(game.oTeam),'num'),function(player, pid){
+                    var playerView = new PlayerItem({model: player, pid: pid});
                     playerView.on('edit',that.edited);
                     playerView.on('remove',that.removed);
                     that.$('.playersContainerRight .playerTable tbody').append(playerView.render().el);
                 });
+
+                for(var i=_.size(game.oTeam);i<12;i++){
+                    that.addUtil(false);
+                };
 
                 Backbone.history.navigate('/games/' + this.model.id + '/pre', false);
 
@@ -315,7 +332,9 @@ define(['jquery',
             id: 'playeritem',
             tagName: 'tr',
 
-            initialize: function(){
+            initialize: function(options){
+
+                this.pid = options.pid;
 
                 _.bindAll(this);
 
@@ -382,8 +401,13 @@ define(['jquery',
 
             events: {
                 'click .buttons .pre': 'gotoPre',
-                'click .buttons .pos': 'gotoPos'
+                'click .buttons .pos': 'gotoPos',
+                'click .back': 'back'
 
+            },
+
+            back: function(){
+                Backbone.history.navigate('/', true);
             },
 
             gotoPre: function(){
@@ -423,6 +447,7 @@ define(['jquery',
                     var sid = Utils.uniqueId();
 
                     var playerView = new PlayerToken({model: this.model, player: player, pid: pid, shot: shot, sid: sid, my: my, drag: true});
+                    playerView.$el.addClass(ui.draggable.attr('class'));
 
                     this.$('#mid').append(playerView.render().el);
 
@@ -467,33 +492,50 @@ define(['jquery',
             var game = this.model.toJSON();
             var offset = this.$('#mid').offset();
 
+            var views = [];
+
             _.each(game.mTeam,function(player,key){
                 var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: true, drag: true});
-                that.$('.mTeam').append(playerView.render().el);
+                views.push(playerView);
+            });
 
-                var shots = game.mShots[key];
+            //mostra a lista de jogadores de forma ordenada
+            views = views.sort(function(a, b) {return a.player.num - b.player.num});
+            _.each(views,function(playerView,i){
+                that.$('.mTeam').append(playerView.render().el);
+                playerView.paint(i);
+
+                var shots = game.mShots[playerView.options.pid];
 
                 _.each(shots,function(shot,sid){
 
-                    var tokenView = new PlayerToken({model: that.model, player: player, shot: shot, pid: key, sid: sid, my: true, drag: true});
+                    var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: true, pos: i, drag: true});
 
                     that.$('#mid').append(tokenView.render().el);
 
                     tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
 
                 });
-
             });
+
+            views = [];
 
             _.each(game.oTeam,function(player,key){
                 var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: false, drag: true});
-                that.$('.oTeam').append(playerView.render().el);
+                views.push(playerView);
+            });
 
-                var shots = game.oShots[key];
+            //mostra a lista de jogadores de forma ordenada
+            views = views.sort(function(a, b) {return b.player.num - a.player.num});
+            _.each(views,function(playerView,i){
+                that.$('.oTeam').append(playerView.render().el);
+                playerView.paint(views.length-i-1);
+
+                var shots = game.oShots[playerView.options.pid];
 
                 _.each(shots,function(shot,sid){
 
-                    var tokenView = new PlayerToken({model: that.model, player: player, shot: shot, pid: key, sid: sid, my: false, drag: true});
+                    var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: views.length-i-1, drag: true});
 
                     that.$('#mid').append(tokenView.render().el);
 
@@ -519,8 +561,23 @@ define(['jquery',
 
             events: {
                 'click .buttons .pre': 'gotoPre',
-                'click .buttons .in': 'gotoIn'
+                'click .buttons .in': 'gotoIn',
+                'click .back': 'back',
+                'click .all': 'all',
+                'change #checkSides': 'updateSides'
 
+            },
+
+            updateSides: function(){
+                var options = this.model.get('options');
+                options.sides = this.$('#checkSides').is(':checked');
+
+                this.model.set('options',options);
+                this.model.save();
+            },
+
+            back: function(){
+                Backbone.history.navigate('/', true);
             },
 
             gotoPre: function(){
@@ -529,6 +586,49 @@ define(['jquery',
 
             gotoIn: function(){
                 this.options.manager.render(2);
+            },
+
+            all: function(evt){
+                var that = this;
+
+                var element = this.$(evt.currentTarget);
+
+                var my = this.$('#top').find(element).length?true:false;
+                var views = my?this.mViews:this.oViews;
+
+                if(element.hasClass('selected')){
+
+                    _.each(views, function(playerView){
+                        playerView.setDisabled(true);
+                        that.$(".shot." + (my?'my':'opp')).hide();
+                    });
+
+                    element.removeClass('selected');
+                }else{
+
+                    _.each(views, function(playerView){
+                        playerView.setDisabled(false);
+                        that.$(".shot." + (my?'my':'opp')).show();
+                    });
+
+
+                    element.addClass('selected');
+                }
+
+            },
+
+            disabledPlayer: function(playerView){
+                this.$(".shot[data-pid='" + playerView.options.pid + "']").hide();
+
+                if(playerView.options.my){
+                    this.$('#top .all').removeClass('selected');
+                }else{
+                    this.$('#bot .all').removeClass('selected');
+                }
+            },
+
+            enablePlayer: function(playerView){
+                this.$(".shot[data-pid='" + playerView.options.pid + "']").show();
             },
 
             render: function(){
@@ -547,15 +647,29 @@ define(['jquery',
                 var game = this.model.toJSON();
                 var offset = this.$('#mid').offset();
 
-                _.each(game.mTeam,function(player,key){
-                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: true, drag: false});
-                    that.$('.mTeam').append(playerView.render().el);
+                this.mViews = [];
+                this.oViews = [];
 
-                    var shots = game.mShots[key];
+                _.each(game.mTeam,function(player,key){
+                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: true, canDisable: true, drag: false});
+
+                    playerView.on('disabled',that.disabledPlayer);
+                    playerView.on('enabled',that.enablePlayer);
+
+                    that.mViews.push(playerView);
+                });
+
+                //mostra a lista de jogadores de forma ordenada
+                this.mViews = this.mViews.sort(function(a, b) {return a.player.num - b.player.num});
+                _.each(this.mViews,function(playerView,i){
+                    that.$('.mTeam').append(playerView.render().el);
+                    playerView.paint(i);
+
+                    var shots = game.mShots[playerView.options.pid];
 
                     _.each(shots,function(shot,sid){
 
-                        var tokenView = new PlayerToken({model: that.model, player: player, pid: key, my: true, drag: false});
+                        var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: true, pos: i, drag: false});
 
                         that.$('#mid').append(tokenView.render().el);
 
@@ -566,20 +680,28 @@ define(['jquery',
                 });
 
                 _.each(game.oTeam,function(player,key){
-                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, sid: sid, my: false, drag: false});
-                    that.$('.oTeam').append(playerView.render().el);
+                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: false, canDisable: true, drag: false});
+                    that.oViews.push(playerView);
+                });
 
-                    var shots = game.oShots[key];
+                //mostra a lista de jogadores de forma ordenada
+                this.oViews = this.oViews.sort(function(a, b) {return b.player.num - a.player.num});
+                _.each(this.oViews,function(playerView,i){
+                    that.$('.oTeam').append(playerView.render().el);
+                    playerView.paint(that.oViews.length-i-1);
+
+                    var shots = game.oShots[playerView.options.pid];
 
                     _.each(shots,function(shot,sid){
 
-                        var tokenView = new PlayerToken({model: that.model, player: player, pid: key, sid: sid, my: false, drag: false});
+                        var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: that.oViews.length-i-1, drag: false});
 
                         that.$('#mid').append(tokenView.render().el);
 
                         tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
 
                     });
+
                 });
 
             }
@@ -601,7 +723,31 @@ define(['jquery',
             },
 
             events: {
-                'click .del': 'delete'
+                'click .del': 'delete',
+                'click': 'toggle'
+            },
+
+            setDisabled: function(disabled){
+                this.disabled = disabled;
+                if(this.disabled){
+                    this.$el.addClass('disabled');
+                }else{
+                    this.$el.removeClass('disabled');
+                }
+
+            },
+
+            toggle: function(){
+                if(!this.shot && this.options.canDisable){
+                    if(this.disabled){
+                        this.$el.removeClass('disabled');
+                        this.trigger('enabled',this);
+                    }else{
+                        this.$el.addClass('disabled');
+                        this.trigger('disabled',this);
+                    }
+                    this.disabled = !this.disabled;
+                }
             },
 
             delete: function(){
@@ -626,6 +772,13 @@ define(['jquery',
                 }
             },
 
+            paint: function(pos){
+
+                this.options.pos = (pos%12);
+
+                this.$el.addClass('color'+this.options.pos);
+            },
+
             render: function(){
 
                 this.$el.html(this.template({player: this.player, my: this.options.my, moment: moment}));
@@ -642,12 +795,19 @@ define(['jquery',
 
                 if(this.options.sid){
                     this.$el.attr('data-sid',this.options.sid);
+                    this.$el.addClass('shot');
                     //se tem sid (shot id) tem que ser com posicionamento absoluto
                     this.$el.css('position','absolute');
+                }else{
+                    this.$el.addClass('player');
                 }
 
                 if(this.options.drag){
                     this.$el.draggable({ revert: this.shot?false:true, containment: this.shot?"parent":undefined });
+                }
+
+                if(this.options.pos != undefined){
+                    this.paint(this.options.pos);
                 }
 
 
