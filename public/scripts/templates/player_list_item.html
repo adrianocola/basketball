@@ -1,12 +1,18 @@
-<% if((!player.num && !player.name && !player.pos) || edit){ %>
-    <td class="action"></td>
-    <td class="number"><input class="numberEdit" value="<%= player.num?player.num:'' %>"/></td>
-    <td class="name"><input class="nameEdit" value="<%= player.name?player.name:'' %>"/></td>
-    <td class="position"><input class="positionEdit" value="<%= player.pos?player.pos:'' %>"/></td>
-<% }else{ %>
-    <td class="action"><button class="del buttonRed buttonRedX">-</button></td>
-    <td class="number"><%= player.num?player.num:'' %></td>
-    <td class="name"><%= player.name?player.name:'' %></td>
-    <td class="position"><%= player.pos?player.pos:'' %></td>
-<% } %>
-
+<td class="action"><button class="del buttonRed buttonRedX">X</button></td>
+<td class="number">
+    <select name="num">
+        <option value="-1"></option>
+        <% for(var i=0;i<100;i++){%>
+        <option value="<%=(i<10?'0':'') + i%>"><%=(i<10?'0':'') + i%></option>
+        <% }%>
+    </select>
+</td>
+<td class="name"><input value="<%= player.name?player.name:'' %>"/></td>
+<td class="position">
+    <select name="pos">
+        <option value="0"></option>
+        <option value="1">Armador</option>
+        <option value="2">Ala</option>
+        <option value="3">Pivô</option>
+    </select>
+</td>

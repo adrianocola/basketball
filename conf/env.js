@@ -10,7 +10,7 @@ env.type_str = env.production?"production":(env.local?"development(local)":"deve
 
 env.node_env = process.env.NODE_ENV || 'development';
 env.port = parseInt(process.env.PORT) || 3000;
-//env.mongo_url = process.env.MONGOLAB_URI || (env.local?'mongodb://localhost/truphy':'mongodb://heroku_app9813381:m8j86nckr0hcc5s8g42tggr1nh@ds045137.mongolab.com:45137/heroku_app9813381');
+env.mongo_url = process.env.MONGOLAB_URI || 'mongodb://localhost/basketball';
 
 if (env.development) {
 

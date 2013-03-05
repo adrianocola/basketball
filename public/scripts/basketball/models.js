@@ -36,7 +36,7 @@ define(['jquery',
             oShots: {
 
             },
-            options: {}
+            opts: {}
 
         }
 
@@ -50,7 +50,7 @@ define(['jquery',
 
         initialize: function(){
 
-            this.storage = new Offline.Storage('games', this);
+            this.storage = new Offline.Storage('games', this, {autoPush: basketball.online?true:false});
 
         }
 

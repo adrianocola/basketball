@@ -81,7 +81,8 @@ define(['jquery',
 
             events: {
                 'click .del': 'delete',
-                'dblclick': 'details'
+                'dblclick': 'details',
+                'click .go': 'details'
             },
 
             details: function(){
@@ -89,8 +90,10 @@ define(['jquery',
             },
 
             delete: function(){
-                this.model.destroy();
-                this.remove();
+                if(confirm("Tem certeza que deseja excluir?")){
+                    this.model.destroy();
+                    this.remove();
+                }
             },
 
             render: function(){
@@ -161,9 +164,9 @@ define(['jquery',
             },
 
             events: {
-                'dblclick #top .title': 'editTitle',
+                'click #top .title:not(.editing)': 'editTitle',
                 'keyup #top .editTitle': 'updateTitle',
-                'dblclick #top .date': 'editDate',
+                'click #top .date:not(.editing)': 'editDate',
                 'click .add': 'addPlayer',
                 'click .buttons .in': 'gotoIn',
                 'click .buttons .pos': 'gotoPos',
@@ -185,6 +188,8 @@ define(['jquery',
 
             editTitle: function(){
                 this.$('#top .title').html('- <input class="editTitle" value="' + this.model.get('name') + '"/>');
+
+                this.$('#top .title').addClass('editing');
             },
 
             updateTitle: function(evt){
@@ -192,9 +197,13 @@ define(['jquery',
                     this.model.set('name',this.$('#top .editTitle').val());
                     this.$('#top .title').html('- ' + this.model.get('name'));
 
-                    this.save();
+                    this.$('#top .title').removeClass('editing');
+
+                    this.model.save();
                 }else if(evt.keyCode == 27){
                     this.$('#top .title').html('- ' + this.model.get('name'));
+
+                    this.$('#top .title').removeClass('editing');
                 }
 
             },
@@ -205,6 +214,8 @@ define(['jquery',
 
                 this.$('#top .date').html('<input class="editDate" value="' + moment(this.model.get('date')).format('DD/MM/YYYY') + '"/>');
 
+                this.$('#top .date').addClass('editing');
+
                 this.$('#top .editDate').datepicker({
                     onSelect: function(dateText, inst){
                         that.model.set('date',that.$('#top .editDate').datepicker( "getDate" ));
@@ -212,7 +223,9 @@ define(['jquery',
 
                         that.$('#top .editDate').datepicker('destroy');
 
-                        that.save();
+                        that.$('#top .date').removeClass('editing');
+
+                        that.model.save();
                     }
                 }).datepicker( "show" );
 
@@ -220,7 +233,7 @@ define(['jquery',
 
             addUtil: function(my){
 
-                var playerView = new PlayerItem({model: {num: 0, name: '', position: 0}, pid: Utils.uniqueId()});
+                var playerView = new PlayerItem({model: {num: -1, name: '', position: 0}, pid: Utils.uniqueId()});
                 playerView.on('edit',this.edited);
                 playerView.on('remove',this.removed);
                 this.$((my?'.playersContainerLeft':'.playersContainerRight') + ' .playerTable tbody').append(playerView.render().el);
@@ -258,33 +271,45 @@ define(['jquery',
 
 
                 this.model.set(teamStr,players);
-                this.save();
+                this.model.save();
 
             },
 
             removed: function(playerView){
 
+                var that = this;
+
                 var teamStr = 'oTeam';
+                var shotsStr = 'oShots';
 
                 //verifica se está adicionado nos meus jogadores
                 if(this.$('.playersContainerLeft').find(playerView.$el).length){
                     teamStr = 'mTeam';
+                    shotsStr = 'mShots';
                 }
 
                 var players = this.model.get(teamStr);
+                var shots = this.model.get(shotsStr);
 
-                delete players[playerView.model.id];
+                var update = function(){
+                    delete players[playerView.pid];
+                    delete shots[playerView.pid];
 
-                this.model.set(teamStr,players);
+                    that.model.set(teamStr,players);
+                    that.model.set(shotsStr,shots);
 
-                this.save();
+                    that.model.save();
 
+                    playerView.remove();
+                }
 
-            },
-
-            save: function(){
-
-                this.model.save();
+                if(_.size(shots[playerView.pid])){
+                    if(confirm('Jogador(a) possui jogadas. Deseja deletá-lo mesmo assim?')){
+                        update();
+                    }
+                }else{
+                    update();
+                }
 
             },
 
@@ -296,25 +321,41 @@ define(['jquery',
 
                 this.$el.html(this.template({game: game, moment: moment}));
 
+                var views = [];
 
-                _.each(Utils.sortByProp(_.values(game.mTeam),'num'),function(player, pid){
+                _.each(game.mTeam,function(player, pid){
                     var playerView = new PlayerItem({model: player, pid: pid});
                     playerView.on('edit',that.edited);
                     playerView.on('remove',that.removed);
+
+                    views.push(playerView);
+                });
+
+                views = views.sort(function(a, b) {return a.model.num - b.model.num});
+                _.each(views, function(playerView){
                     that.$('.playersContainerLeft .playerTable tbody').append(playerView.render().el);
                 });
-                for(var i=_.size(game.mTeam);i<12;i++){
+
+                for(var i=_.size(game.mTeam);i<5;i++){
                     that.addUtil(true);
                 };
 
-                _.each(Utils.sortByProp(_.values(game.oTeam),'num'),function(player, pid){
+                views = [];
+
+                _.each(game.oTeam,function(player, pid){
                     var playerView = new PlayerItem({model: player, pid: pid});
                     playerView.on('edit',that.edited);
                     playerView.on('remove',that.removed);
+
+                    views.push(playerView);
+                });
+
+                views = views.sort(function(a, b) {return a.model.num - b.model.num});
+                _.each(views, function(playerView){
                     that.$('.playersContainerRight .playerTable tbody').append(playerView.render().el);
                 });
 
-                for(var i=_.size(game.oTeam);i<12;i++){
+                for(var i=_.size(game.oTeam);i<5;i++){
                     that.addUtil(false);
                 };
 
@@ -342,44 +383,32 @@ define(['jquery',
             },
 
             events: {
-                'keyup .numberEdit': 'update',
-                'keyup .nameEdit': 'update',
-                'keyup .positionEdit': 'update',
-                'click .del': 'delete',
-                'dblclick': 'edit'
-            },
-
-            edit: function(){
-                this.$el.html(this.template({player: this.model, edit: true, moment: moment}));
+                'change .number select': 'update',
+                'change .name input': 'update',
+                'blur .name input': 'update',
+                'change .position select': 'update',
+                'click .del': 'delete'
             },
 
             update: function(evt){
-                if(evt.keyCode == 13){
-                    this.model.num = this.$('.numberEdit').val();
-                    this.model.name = this.$('.nameEdit').val();
-                    this.model.pos = this.$('.positionEdit').val();
-                    this.render();
+                this.model.num = this.$('.number select').val();
+                this.model.name = this.$('.name input').val();
+                this.model.pos = this.$('.position select').val();
+                this.render();
 
-                    this.trigger('edit',this);
-                }else if(evt.keyCode == 27){
-                    if(!this.model.num && !this.model.name && !this.model.pos){
-                        this.delete();
-                    }else{
-                        this.render();
-                    }
-                }
+                this.trigger('edit',this);
             },
 
             delete: function(){
                 this.trigger('remove',this);
-
-                this.remove();
-
             },
 
             render: function(){
 
                 this.$el.html(this.template({player: this.model, edit: false, moment: moment}));
+
+                this.$('.number select').val((this.model.num<10?'0':'') + parseInt(this.model.num));
+                this.$('.position select').val(parseInt(this.model.pos));
 
                 return this;
             }
@@ -402,7 +431,8 @@ define(['jquery',
             events: {
                 'click .buttons .pre': 'gotoPre',
                 'click .buttons .pos': 'gotoPos',
-                'click .back': 'back'
+                'click .back': 'back',
+                'change #checkHide': 'updateHide'
 
             },
 
@@ -416,6 +446,14 @@ define(['jquery',
 
             gotoPos: function(){
                 this.options.manager.render(3);
+            },
+
+            updateHide: function(){
+                var options = this.model.get('opts');
+                options.hide = this.$('#checkHide').is(':checked');
+
+                this.model.set('opts',options);
+                this.model.save();
             },
 
             addedToken: function(event,ui){
@@ -436,7 +474,7 @@ define(['jquery',
                 //console.log(ui.offset.left + ":" + ui.offset.top);
                 //console.log(offset.left + ":" + offset.top);
 
-                //é um shot
+                //não é um shot
                 if(!sid){
 
                     var x = ui.offset.left - offset.left;
@@ -569,11 +607,27 @@ define(['jquery',
             },
 
             updateSides: function(){
-                var options = this.model.get('options');
+                var options = this.model.get('opts');
                 options.sides = this.$('#checkSides').is(':checked');
 
-                this.model.set('options',options);
+                this.showSides(options.sides);
+
+                this.model.set('opts',options);
                 this.model.save();
+            },
+
+            showSides: function(sides){
+
+
+                _.each(this.mShotsViews,function(shotView){
+                    shotView.showOnSide(sides,true);
+                });
+
+                _.each(this.oShotsViews,function(shotView){
+                    shotView.showOnSide(sides,true);
+                });
+
+
             },
 
             back: function(){
@@ -650,6 +704,9 @@ define(['jquery',
                 this.mViews = [];
                 this.oViews = [];
 
+                this.mShotsViews = [];
+                this.oShotsViews = [];
+
                 _.each(game.mTeam,function(player,key){
                     var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: true, canDisable: true, drag: false});
 
@@ -670,10 +727,12 @@ define(['jquery',
                     _.each(shots,function(shot,sid){
 
                         var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: true, pos: i, drag: false});
+                        that.mShotsViews.push(tokenView);
 
                         that.$('#mid').append(tokenView.render().el);
 
                         tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
+                        tokenView.showOnSide(game.opts.sides);
 
                     });
 
@@ -681,6 +740,10 @@ define(['jquery',
 
                 _.each(game.oTeam,function(player,key){
                     var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: false, canDisable: true, drag: false});
+
+                    playerView.on('disabled',that.disabledPlayer);
+                    playerView.on('enabled',that.enablePlayer);
+
                     that.oViews.push(playerView);
                 });
 
@@ -695,10 +758,12 @@ define(['jquery',
                     _.each(shots,function(shot,sid){
 
                         var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: that.oViews.length-i-1, drag: false});
+                        that.oShotsViews.push(tokenView);
 
                         that.$('#mid').append(tokenView.render().el);
 
                         tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
+                        tokenView.showOnSide(game.opts.sides);
 
                     });
 
@@ -748,6 +813,29 @@ define(['jquery',
                     }
                     this.disabled = !this.disabled;
                 }
+
+            },
+
+            showOnSide: function(side,animate){
+
+                if(!this.shot) return;
+
+                var offset = $('#mid').offset();
+
+                if(side){
+                    if(this.options.my){
+                        if(this.shot.x > 460){
+                            this.$el[animate?"animate":"css"]({left: this.shot.x-2*(this.shot.x-460) +8, top: 518 - this.shot.y + offset.top -32},1000);
+                        }
+                    }else{
+                        if(this.shot.x < 460){
+                            this.$el[animate?"animate":"css"]({left: 460 + (460-this.shot.x) + 8, top: 518 - this.shot.y + offset.top -32},1000);
+                        }
+                    }
+                }else{
+                    this.$el[animate?"animate":"css"]({left: this.shot.x, top: this.shot.y + offset.top},1000);
+                }
+
             },
 
             delete: function(){

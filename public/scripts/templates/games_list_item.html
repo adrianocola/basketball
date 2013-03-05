@@ -1,3 +1,6 @@
-<button class="del buttonRed buttonRedX">-</button>
-<div class="date"><%= moment(game.date).format('DD/MM/YYYY') %></div>
-<div class="name"><%= game.name %></div>
+<button class="del buttonRed buttonRedX">X</button>
+<div class="details">
+    <div class="date"><%= moment(game.date).format('DD/MM/YYYY') %></div>
+    <div class="name"><%= game.name %></div>
+</div>
+<button class="go buttonOrange selected">→</button>

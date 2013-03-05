@@ -69,19 +69,6 @@ app.configure('production', function(){
     app.use(errorsHandler);
     app.use(express.errorHandler());
 
-    //compila o aplicativo da store com o require.js
-    requirejs.optimize({
-        //preserveLicenseComments: false,
-        baseUrl: 'public/scripts',
-        name: 'basketball/basketball',
-        out: 'public-static/scripts/basketball-' + deps.version + '.js',
-        paths: deps.consts.requirejs_paths,
-        shim: deps.consts.requirejs_shim
-    }, function (buildResponse) {}, function(err) {
-        console.log("ERROR RequireJS Optimization");
-        console.log(err);
-    });
-
 });
 
 
@@ -94,3 +81,7 @@ app.configure('production', function(){
 var server = http.createServer(app).listen(app.env.port);
 
 console.log("(%s) Express server listening on port %d in %s mode", deps.version, app.env.port, app.env.type_str);
+
+setInterval(function(){
+    console.log('ping');
+},600000);

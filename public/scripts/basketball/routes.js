@@ -90,22 +90,26 @@ define([
         }
     });
 
-    var initialize = function(_storeId){
+    var initialize = function(){
+        console.log("INIT");
+
+        if(basketball.online){
+            console.log('Executando em modo ONLINE');
+        }else{
+            console.log('Executando em modo OFFLINE');
+            basketball.online = false;
+            basketball.offline = true;
+        }
 
         var collection = new Models.GameCollection();
 
-        collection.fetch({local: true, success: function(c, r, o){
+        collection.fetch({local: basketball.offline?true:false, success: function(){
             var app_router = new AppRouter(collection);
 
             //inicializa controle de histórico (verifica se pode usar push state)
             Utils.startHistory(app_router);
 
         }});
-
-
-
-
-
 
 
     };

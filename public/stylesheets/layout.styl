@@ -64,16 +64,39 @@ em
 
 #gamelist .gameitem .del
     display: inline-block
-    visibility: hidden
 
-#gamelist .gameitem:hover .del
-    visibility: visible
+//#gamelist .gameitem:hover .del
+//    visibility: visible
+
+#gamelist .gameitem .go
+    display: inline-block
+    height: 28px
+    line-height: 16px
+    font-weight: bold
+    padding: 1px 3px
+
+//#gamelist .gameitem:hover .go
+//    visibility: visible
+
+#gamelist .gameitem .details
+   display: inline-block
+   border:1px solid black
+   background-color: rgba(0,0,0,0.5)
+   border-radius: 6px
+   padding-right: 10px
 
 #gamelist .gameitem .date
     display: inline-block
+    border-right :1px solid black
+    border-radius: 6px
+    background-color: white
+    padding: 1px 10px
 
 #gamelist .gameitem .name
     display: inline-block
+    font-weight: bold
+    margin-left: 5px
+    color: white
 
 //************************
 //***** GAME DETAIL ******
@@ -91,6 +114,10 @@ em
 #pregame #top .date
     display: inline-block
     font-size: 32px
+
+#pregame #top .date input
+    font-size: 28px
+    width: 200px
 
 #pregame #top .title
     display: inline-block
@@ -111,13 +138,16 @@ em
 
 #pregame #mid .playersContainerLeft, #pregame #mid .playersContainerRight
     display: inline-block
-    height: 100%
+    height: 500px
     width: 45%
     margin: 0 23px
     vertical-align: top
+    box-sizing:border-box
+    margin-top: 10px
+    overflow: auto
 
 #pregame .playerTable
-    margin: 20px 0
+    margin: 5px 0
 
 #pregame .playerTable tr
     height: 24px
@@ -126,20 +156,28 @@ em
     width: 20px
 
 #pregame .playerTable tr td.action
-    visibility: hidden
-
-#pregame .playerTable tr:hover td.action
     visibility: visible
 
-#pregame .playerTable .number
-    width: 100px
+#pregame .playerTable td
+    padding: 1 5px
 
-#pregame .playerTable .name
-    width: 200px
+#pregame .playerTable th.number
+    width: 60px
 
-#pregame .playerTable .position
-    width: 100px
+#pregame .playerTable .number select
+    width: 50px
 
+#pregame .playerTable th.name
+    width: 220px
+
+#pregame .playerTable .name input
+    width: 180px
+
+#pregame .playerTable th.position
+    width: 80px
+
+#pregame .playerTable .position select
+    width: 80px
 
 //************************
 //******** TOKEN *********
@@ -162,7 +200,7 @@ em
     box-shadow: 2px 2px 3px rgba(0,0,0,0.5)
 
 .token.opp
-    background-color: #ccc
+    background-color: #ddd
     border: 1px solid red
 
 #mid .token:hover:not(.ui-draggable-dragging)
@@ -232,6 +270,9 @@ em
     display: inline-block
     font-size: 16px
 
+#ingame .controls
+    margin-top: 5px
+
 #ingame .team
     display: inline-block
 
@@ -274,6 +315,7 @@ em
     position: relative
     display: inline-block
     margin: 0 2px
+    cursor: pointer
 
 #posgame .oTeam
     float: right

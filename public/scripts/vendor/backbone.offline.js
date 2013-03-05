@@ -110,6 +110,7 @@
                 if (options == null) {
                     options = {};
                 }
+
                 if (!(options.local || (sid = model.get('sid')) === 'new')) {
                     this.destroyIds.add(sid);
                 }
