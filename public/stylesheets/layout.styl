@@ -1,0 +1,226 @@
+@import 'nib'
+
+//************************
+//********* MAIN *********
+//************************
+
+body
+    font: 12px "Lucida Grande", Helvetica, Arial, sans-serif
+    font-size: 12px
+    font-weight: 400
+    margin: 0 0 0 0
+    padding: 0
+    border: 0
+    background-color: white
+
+em
+    font-weight: bold
+    text-decoration: underline
+
+.hidden
+    display: none
+
+#main
+    width: 960px
+    margin-left: auto
+    margin-right: auto
+    position: relative
+    overflow: hidden
+
+#main #top
+    margin: 20px 0
+    height: 40px
+
+#main #mid
+    height: 518px
+    background-image: url('/images/court.jpg')
+
+#main #bot
+    margin: 20px 0
+    height: 40px
+
+//************************
+//****** GAME LIST *******
+//************************
+
+#gamelist #top .title
+    display: inline-block
+    font-size: 32px
+
+#gamelist #listContainer
+    width: auto
+    height: 100%
+    background-color: rgba(255,255,255,0.8)
+    padding: 20px
+    overflow: auto
+    box-sizing: border-box
+
+#gamelist .gameitem
+    list-style: none
+    margin-top: 3px
+    padding: 3px 5px
+    width: auto
+    line-height: 24px
+
+#gamelist .gameitem .del
+    display: inline-block
+    visibility: hidden
+
+#gamelist .gameitem:hover .del
+    visibility: visible
+
+#gamelist .gameitem .date
+    display: inline-block
+
+#gamelist .gameitem .name
+    display: inline-block
+
+//************************
+//***** GAME DETAIL ******
+//************************
+
+#top .buttons
+    float: right
+
+//************************
+//******* PRE GAME *******
+//************************
+
+#pregame #top .date
+    display: inline-block
+    font-size: 32px
+
+#pregame #top .title
+    display: inline-block
+    font-size: 32px
+
+#pregame #top .editTitle
+    display: inline-block
+    font-size: 28px
+
+#pregame #mid .playersContainer
+    width: 100%
+    height: 100%
+    background-color: rgba(255,255,255,0.8)
+    text-align: center
+
+#pregame #mid .playersContainer h1
+    text-align: center
+
+#pregame #mid .playersContainerLeft, #pregame #mid .playersContainerRight
+    display: inline-block
+    height: 100%
+    width: 45%
+    margin: 0 23px
+    vertical-align: top
+
+#pregame .playerTable
+    margin: 20px 0
+
+#pregame .playerTable tr
+    height: 24px
+
+#pregame .playerTable .action
+    width: 20px
+
+#pregame .playerTable tr td.action
+    visibility: hidden
+
+#pregame .playerTable tr:hover td.action
+    visibility: visible
+
+#pregame .playerTable .number
+    width: 100px
+
+#pregame .playerTable .name
+    width: 200px
+
+#pregame .playerTable .position
+    width: 100px
+
+
+//************************
+//******** TOKEN *********
+//************************
+
+
+.token
+    display: block
+    border: 1px solid black
+    border-radius: 15px
+    width: 30px
+    height: 30px
+    text-align: center
+    line-height: 30px
+    font-size: 18px
+    font-weight: bold
+    position: absolute
+    background-color: white
+
+.token.opp
+    background-color: #ccc
+
+#mid .token:hover:not(.ui-draggable-dragging)
+    transition: all .2s;
+    transform: scale(1.2)
+
+.token .del
+    position: absolute
+    display: none
+
+#mid .token
+    z-index: 1
+
+#top .token, #bot .token
+    z-index: 10
+
+//************************
+//******** IN GAME *******
+//************************
+
+#ingame #bot .date
+    display: inline-block
+    font-size: 16px
+
+#ingame #bot .title
+    display: inline-block
+    font-size: 16px
+
+#ingame .team .token
+    position: relative
+    display: inline-block
+    margin: 0 2px
+
+#ingame #mid .token:hover .del
+    display: block
+    top: -10px
+    left: 20px
+    width: 20px
+    height: 20px
+    min-width: 20px
+
+#ingame .oTeam
+    float: right
+
+//************************
+//******* POS GAME *******
+//************************
+
+#posgame #bot .date
+    display: inline-block
+    font-size: 16px
+
+#posgame #bot .title
+    display: inline-block
+    font-size: 16px
+
+#ingame .team
+    display: block
+
+#posgame .team .token
+    position: relative
+    display: inline-block
+    margin: 0 2px
+
+#posgame .oTeam
+    float: right

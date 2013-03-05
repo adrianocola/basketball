@@ -1,0 +1,126 @@
+!!!
+
+head
+
+    script(type="text/javascript").
+        //workspace do basketball
+        var basketball = {
+            env_production: #{env.production},
+            env_development: #{env.development},
+            env_local: #{env.local},
+            url: "#{env.url}",
+            now: "#{env.now}"
+        };
+
+    block head
+
+
+    script(type="text/javascript",src="/scripts/vendor/jquery.js")
+
+
+    //- faz load do require.js
+    script(src="/scripts/vendor/require.js")
+
+
+
+    script(type="text/javascript").
+
+        var basketball = "";
+        var bust = "bust=";
+
+        //verifica se é produção ou dev
+        if(#{env.production}){
+            basketball = "/scripts/basketball-site-#{env.version}";
+            bust += "#{env.version}";
+
+        }else{
+            basketball = "/scripts/basketball/basketball";
+            bust += (new Date()).getTime();
+        }
+
+
+        require.config({
+            urlArgs: bust, /*http://stackoverflow.com/questions/8315088/prevent-requirejs-from-caching-required-scripts*/
+            baseUrl: "/scripts",
+            paths: {
+                //scripts
+                "jquery": "/scripts/vendor/jquery",
+                "jquery-ui": "/scripts/vendor/jquery-ui",
+                "jquery.form": "/scripts/vendor/jquery.form",
+                "jquery.easing": "/scripts/vendor/jquery.easing",
+                "jquery.inputmask": "/scripts/vendor/jquery.inputmask",
+                "jquery.inputmask.date": "/scripts/vendor/jquery.inputmask.date",
+                "jquery.inputmask.numeric": "/scripts/vendor/jquery.inputmask.numeric",
+                "underscore": "/scripts/vendor/underscore",
+                "backbone": "/scripts/vendor/backbone",
+                "backbone.offline": "/scripts/vendor/backbone.offline",
+                "underscore.mixin.deepExtend": "/scripts/vendor/underscore.mixin.deepExtend",
+                "deep-models": "/scripts/vendor/deep-models",
+                "spin": "/scripts/vendor/spin",
+                "colorpicker": "/scripts/vendor/colorpicker",
+                "modernizr": "/scripts/vendor/modernizr",
+                "moment": "/scripts/vendor/moment",
+                "accounting": "/scripts/vendor/accounting",
+
+
+                "Basketball": basketball,
+                "Routes": "/scripts/basketball/routes",
+                "Views": "/scripts/basketball/views",
+                "Models": "/scripts/basketball/models",
+                "Startup": "/scripts/basketball/startup",
+                "Utils": "/scripts/basketball/utils"
+
+            },
+            shim: {
+                'underscore': {
+                    exports: '_'
+                },
+                'backbone': {
+                    deps: ['underscore', 'jquery'],
+                    exports: 'Backbone'
+                },
+                'backbone.offline': {
+                    deps: ['underscore', 'backbone'],
+                    exports: 'Offline'
+                },
+                'deep-models': {
+                    deps: ['backbone','underscore','underscore.mixin.deepExtend'],
+                    exports: 'Backbone'
+                },
+                'colorpicker':{
+                    deps: ['jquery']
+                },
+                'jquery-ui':{
+                    deps: ['jquery']
+                },
+                'jquery.form':{
+                    deps: ['jquery']
+                },
+                'modernizr':{
+                    exports: 'Modernizr'
+                },
+                'moment':{
+                    exports: 'moment'
+                },
+                'jquery.inputmask':{
+                    deps: ['jquery']
+                },
+                'jquery.inputmask.numeric':{
+                    deps: ['jquery','jquery.inputmask']
+                },
+                'jquery.inputmask.date':{
+                    deps: ['jquery','jquery.inputmask']
+                },
+                'accounting':{
+                    exports: 'accounting'
+                }
+            }
+        });
+
+    //- nesse bloco que as páginas definem as dependências usando require.js
+
+    block require
+
+body(style="display:none;")
+    block body
+

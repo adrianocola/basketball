@@ -1,0 +1,619 @@
+@import 'nib'
+
+//************************
+//******* BUTTONS ********
+//************************
+
+.buttonDelete
+    background-color: black
+    background: linear-gradient(top,  rgba(78,82,85,1) 0%,rgba(54,58,61,1) 100%)
+    color: white
+    border: 2px solid white
+    border-radius: 25px
+    width: 20px
+    height: 20px
+    line-height: 20px
+    font-size: 14px
+    text-align: center
+    font-weight: bold
+    box-shadow: 1px 1px 5px rgba(0,0,0,1)
+    cursor: hand
+    cursor: pointer
+
+.buttonDelete:hover
+    background: linear-gradient(bottom,  rgba(78,82,85,1) 0%,rgba(54,58,61,1) 100%)
+
+.buttonSimple
+    background-color: white
+    border: 1px solid #bbb
+    border-radius: 6px
+    color: #333
+    padding: 4px 6px
+
+.buttonSimple:hover
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.4)
+
+.buttonSimple:active
+    box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 5px 0px rgba(0,0,0,0.4)
+
+.buttonGreen
+    min-width: 40px;
+    height: 24px;
+    padding: 0 10px 0 10px
+    border: 1px solid #82ae0d;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.66), 0 1px 1px rgba(70, 70, 70, 0.19);
+    background: linear-gradient(bottom, #85b012 0%, #9cc71a 21.6%, #b3de23 100%);
+    border-radius: 8px;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    font: bold 12px/30px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    vertical-align: top
+
+.buttonGreen:active
+    background: linear-gradient(bottom, #9cc71a 83.6%, #85b012 100%);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.56);
+
+.buttonRed, .buttonRedX
+    min-width: 40px;
+    height: 24px;
+    padding: 0 10px 0 10px
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.66), 0 1px 1px rgba(70, 70, 70, 0.19);
+    background: linear-gradient(bottom, #b01111 0%, #c71919 21.6%, #de2222 100%);
+    border-radius: 8px;
+    border: 1px solid #960e0e;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    font: bold 12px/30px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    vertical-align: top
+
+.buttonRedX
+    min-width: 24px;
+    border-radius: 25px;
+    padding: 0
+
+.buttonRed:active
+    background-image: linear-gradient(bottom, #c71919 0%, #de2222 87.4%);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.59);
+
+.buttonBlue
+    min-width: 40px;
+    height: 24px;
+    padding: 0 10px 0 10px
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45), 0 1px 1px rgba(70, 70, 70, 0.19);
+    background: linear-gradient(bottom, #3a68c7 0%, #5e81c5 26.2%);
+    border-radius: 8px;
+    position: relative;
+    border: 1px solid #4859b2;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    font: bold 12px/30px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    vertical-align: top
+
+.buttonBlue:active
+    background-image: linear-gradient(bottom, #5e81c5 72.5%, #4470ca 100%);
+    box-shadow: inset 0 1px 2px black;
+
+button[disabled="disabled"]
+    min-width: 70px;
+    height: 24px;
+    padding: 0 10px 0 10px
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45), 0 1px 1px rgba(70, 70, 70, 0.19);
+    //background: linear-gradient(bottom, #bbbbbb 0%, #cccccc 26.2%);
+    background: #dddddd
+    border-radius: 8px;
+    position: relative;
+    border: 1px solid #bbbbbb;
+    color: #999999;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.2);
+    font: bold 12px/30px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    text-align: center;
+    line-height: 20px;
+    cursor: auto;
+
+button[disabled="disabled"]:active
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45), 0 1px 1px rgba(70, 70, 70, 0.19);
+    //background: linear-gradient(bottom, #bbbbbb 0%, #cccccc 26.2%);
+    background: #dddddd
+    cursor: default;
+
+//************************
+//****** VALIDATE ********
+//************************
+
+.fieldValidateIcon
+    position: relative
+    margin-right: -16px
+    left: 6px
+
+//************************
+//******** FIELDS ********
+//************************
+
+
+input[type="text"], input[type="email"], input[type="password"], textarea
+    font-size:12px
+    padding: 4px 5px
+    border-radius:6px
+    border: 1px solid #bbb
+    box-sizing: border-box
+    box-shadow: none
+
+input[type="text"].invalid, input[type="email"].invalid, input[type="password"].invalid, textarea.invalid, select.invalid
+    background-color: rgba(255,247,247,1)
+    border: 1px solid red
+    padding-left: 25px
+    box-sizing: border-box
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus
+    border: 1px solid rgba(111,188,242,1)
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12),0px 0px 5px #999;
+
+input.fitInput
+    border: none
+    box-shadow: none
+    width: 100%
+    height: 100%
+
+//************************
+//******* COMBOBOX *******
+//************************
+
+select
+    border: 1px solid #bbb
+    appearance: button
+    padding: 4px 5px
+    border-radius:6px
+    box-shadow: none
+    font-size:12px
+    background: url('/images/select.png') no-repeat right white
+    background-position: 95%
+
+//************************
+//******** SEARCH ********
+//************************
+
+.search
+    background: url('/images/search.png') no-repeat right white
+    background-position: 95%
+
+//************************
+//******* CALENDAR *******
+//************************
+
+.calendar
+    background: url('/images/calendar.png') no-repeat right white
+    background-position: 95%
+
+
+//************************
+//******* CHECKBOX *******
+//************************
+
+
+//************************
+//******** TABLES ********
+//************************
+
+
+table
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0px
+
+.displayTable
+    text-align:center
+
+.displayTable td
+    padding: 5px 0px
+    border-bottom: 1px solid #dddddd
+
+.displayTable tr:last-child td
+    border-bottom: none
+
+.displayTable th
+    color:#777777
+    font-size:14px
+    font-weight:bold
+    padding: 6px 6px
+    text-decoration:none
+    text-shadow:1px 1px 0px #ffffff
+    background: linear-gradient( center top, #ededed 5%, #dfdfdf 100% )
+    border-top: 1px solid #bbbbbb
+    border-bottom: 1px solid #aaaaaa
+    border-right: 1px solid #bbbbbb
+    box-shadow: 0px 1px 3px rgba(150,150,150,0.4), inset 0px 1px 0px 0px #ffffff
+
+
+.displayTable th:first-child
+    border-radius: 6px 0 0 0
+    border-left: 1px solid #bbbbbb
+
+.displayTable th:last-child
+    border-radius: 0 6px 0 0
+
+
+//************************
+//******** SLIDER ********
+//************************
+
+
+/* The styles given to the associated form element in order to hide it */
+.fd-form-element-hidden
+    display:none
+    
+/* Horizontal Outer wrapper - all other DOM elements added as children to this top level wrapper */
+.fd-slider
+    /* The height of the slider handle */
+    height:20px
+    margin:0
+    vertical-align: top
+    width: 180px
+    /* display:block required as the wrapper element is a span */
+    display:inline-block
+    /* This lets us absolutely position the drag handle */
+    position:relative
+    text-decoration:none
+    border:0 none
+    -moz-user-select:none
+    -khtml-user-select:none
+    -webkit-touch-callout:none
+    user-select:none
+        
+.fd-slider-inner
+    /* Used by IE for the onfocus blur effect */
+    display:none
+
+/* The inner track bar */
+.fd-slider-bar
+    position:absolute
+    display:block
+    z-index:2
+    height:6px
+    width:100%
+    border:1px solid #bbb
+    border-bottom:1px solid #fff
+    border-right:1px solid #fff
+    margin:0
+    padding:0
+    overflow:hidden
+    line-height:4px
+    top:8px
+    -moz-border-radius:4px
+    -webkit-border-radius:4px
+    border-radius:4px
+    -moz-background-clip: padding
+    -webkit-background-clip: padding-box
+    background-clip: padding-box
+    background-color: #ddd
+        
+/* The animated range bar */
+.fd-slider-range
+    position:absolute
+    display:block
+    z-index:3
+    height:6px
+    margin:0
+    padding:0 2px 0 0
+    overflow:hidden
+    top:9px
+    -moz-border-radius:2px
+    -webkit-border-radius:2px
+    border-radius:2px
+    -moz-background-clip: padding
+    -webkit-background-clip: padding-box
+    background-clip: padding-box
+    background-color: #666
+        
+/* The drag handle */
+.fd-slider-handle
+    position:absolute
+    display:block
+    padding:0
+    border:0 none
+    margin:0 0 0 1px
+    z-index:3
+    top:5px
+    left:0
+    width:12px
+    height:12px
+    line-height: 1px !important
+    outline:0 none
+    background: #eee
+    border: 1px solid #aaa
+    border-radius: 12px
+    -webkit-user-select: none
+    -webkit-touch-callout:none
+    -moz-user-select:none
+    -moz-user-focus:none
+    -moz-outline:0 none
+    user-select:none
+        
+/* Focus styles */
+.fd-slider-handle:focus
+    outline:0 none
+    border:0 none
+    -moz-user-focus:normal
+        
+button.fd-slider-handle:focus::-moz-focus-inner
+    border-color: transparent
+
+
+//************************
+//**** SLIDER TOOLTIP ****
+//************************
+
+.fd-slider-handle:before, .fd-slider-handle:after
+    /* Remove from screen */
+    opacity:0
+    /* The following rules are not really needed as no browser yet supports CSS transitions
+       on generated content but I'll leave it in for the day when they do! */
+
+    /* Firefox */
+    -moz-transition-property: opacity
+    -moz-transition-duration: 1s
+    -moz-transition-delay: 1s
+    /* WebKit */
+    -webkit-transition-property: opacity
+    -webkit-transition-duration: 1s
+    -webkit-transition-delay: 1s
+    /* Opera */
+    -o-transition-property: opacity
+    -o-transition-duration: 1s
+    -o-transition-delay: 1s
+    /* Standard */
+    transition-property: opacity
+    transition-duration: 1s
+    transition-delay: 1s
+
+.fd-slider-focused .fd-slider-handle:before,
+.fd-slider-hover   .fd-slider-handle:before,
+.fd-slider-active  .fd-slider-handle:before
+    display:block
+    position:absolute
+    top:-21px
+    left:-8px
+    margin:0
+    width:20px
+    padding:3px
+    height:14px
+    line-height:12px
+    text-align: center
+    font-size:10px
+    font-weight: bold
+    color:#fff
+    text-shadow: 1px 1px 1px #1a3a95
+    background:#2f6ee0
+    z-index:1
+    /* Use the ARIA valuetext property, set by the script, to generate the tooltip content */
+    content:attr(aria-valuetext)
+    /* Border radius and box shadow */
+    -moz-border-radius:3px
+    -webkit-border-radius:3px
+    border-radius:3px
+    -moz-background-clip: padding
+    -webkit-background-clip: padding-box
+    background-clip: padding-box
+    -moz-box-shadow: 0 0 4px #aaa
+    -webkit-box-shadow: 0 0 4px #aaa
+    box-shadow: 0px 0px 4px #999
+    /* Change opacity for transition */
+    opacity: 1
+        
+/* The tooltip pointer */
+.fd-slider-focused .fd-slider-handle:after,
+.fd-slider-hover   .fd-slider-handle:after,
+.fd-slider-active  .fd-slider-handle:after
+    outline:none
+    content:""
+    display:block
+    position:absolute
+    top:-9px
+    left:50%
+    margin:0 0 0 -5px
+    background:#2f6ee0
+    z-index:2
+    width:10px
+    height:10px
+    overflow:hidden
+    /* Rotate element by 45 degress to get the "\/" pointer effect */
+    -webkit-transform: rotate(45deg)
+    -moz-transform: rotate(45deg)
+    -o-transform: rotate(45deg)
+    /* Add a box shadow */
+    -moz-box-shadow: 0 0 4px #aaa
+    -webkit-box-shadow: 0 0 4px #aaa
+    box-shadow: 0 0 4px #aaa
+    /* Clip */
+    clip:rect(4px, 14px, 14px, 4px)
+    /* Change opacity for transition */
+    opacity: 1
+        
+/* Remove completely for IE */
+.oldie .fd-slider-handle:before,
+.oldie .fd-slider-handle:after
+    display:none
+
+//************************
+//****** DESATURATE ******
+//************************
+//http://demosthenes.info/blog/532/Convert-Images-To-Black-And-White-With-CSS
+
+.grayscale
+    filter: grayscale(100%)
+    -webkit-filter: grayscale(100%)
+    -moz-filter: grayscale(100%)
+    -ms-filter: grayscale(100%)
+    -o-filter: grayscale(100%)
+    filter: gray
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale")
+    filter: unquote('progid:DXImageTransform.Microsoft.BasicImage(grayscale=1)')
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(grayscale=1)"
+    -webkit-filter: grayscale(1)
+    //TODO não está funcionando grayscale na MERDA do IE10
+
+
+//************************
+//***** PHOTO SHADOW *****
+//************************
+
+
+/*
+.photobox
+	position: relative
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+
+.photobox.frame
+    border: 7px solid white
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(0, 0, 0, 0.2);
+
+.photobox:before, .photobox:after
+	position: absolute
+	width: 40%
+	height: 10px
+	content: ' '
+	left: 6px
+	bottom: 8px
+	background: transparent
+	transform: skew(-5deg) rotate(-5deg)
+	box-shadow: 0 10px 13px rgba(0, 0, 0, 0.3);
+	z-index: -1
+	
+.photobox:after
+	left: auto
+	right: 6px
+	transform: skew(5deg) rotate(5deg)
+*/
+
+
+.smallphotobox
+    box-sizing: border-box
+    background-color: white
+    position: relative
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(0, 0, 0, 0.1)
+
+.smallphotobox.border
+    padding: 3px
+
+.smallphotobox.withcolorpicker
+    padding: 0 2px 2px 0
+
+.smallphotobox:after
+    position: absolute
+    bottom: -4px
+    left: 0
+    content: ''
+    width: 100%
+    height: 4px
+    background-image: url('/images/shadow-small.png')
+    background-repeat:no-repeat
+    background-size:100% 4px;
+
+
+//************************
+//********** HELP ********
+//************************
+
+.help
+    display: inline-block
+    position: relative
+    overflow: visible
+    width: 16px
+    height: 16px
+    vertical-align: middle
+
+.helpImage
+    width: 16px
+    height: 16px
+
+.helpMsg
+    display: none
+    position: absolute
+    background-color: rgba(255,255,255,0.9)
+    border-radius: 12px
+    border: 2px solid rgba(0,0,0,0.2)
+    width: 200px
+    height: auto
+    top: 18px
+    left: -100px
+    padding: 10px
+    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.6)
+    z-index: 99999999
+    animation-delay: 0.2s
+    animation-duration: 0.6s
+    animation-fill-mode: both
+    animation-name: fadeOut
+
+.helpMsg .red
+    color: red
+
+.helpMsg.helpMsgRed
+    //background-color: rgb(255,245,245)
+    border: 2px solid rgba(255,0,0,1)
+
+
+.help:hover .helpImage.rotate
+    animation-delay:0.2s;
+    animation-duration: 2s
+    animation-iteration-count:  infinite
+    transition-timing-function: linear
+    animation-name: rotate
+
+.help:hover .helpMsg
+    display: block
+    animation-name: fadeIn
+
+.help.help-bottom .helpMsg
+    top: 15px
+    right: auto
+    bottom: auto
+    left: -100px
+
+.help.help-bottom-left .helpMsg
+    top: 15px
+    right: 5px
+    bottom: auto
+    left: auto
+
+.help.help-bottom-right .helpMsg
+    top: 15px
+    right: auto
+    bottom: auto
+    left: 5px
+
+.help.help-top .helpMsg
+    top: auto
+    right: auto
+    bottom: 20px
+    left: -100px
+
+.help.help-top-left .helpMsg
+    top: auto
+    right: 18px
+    bottom: 18px
+    left: auto
+
+.help.help-top-right .helpMsg
+    top: auto
+    right: 20px
+    bottom: 22px
+    left: auto
+
+.helpTitle
+    text-align: center
+    font-size: 14px
+    margin-bottom: 5px
+    font-weight: bold
+    text-decoration:underline
+
+.helpText
+    text-align: justify
+
+

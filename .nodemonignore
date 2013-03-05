@@ -1,0 +1,6 @@
+/.git/*
+.idea
+/public-static/*
+/node_modules/*
+*.css
+build.json
