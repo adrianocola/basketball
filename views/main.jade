@@ -1,0 +1,29 @@
+extends layouts/layout_with_require
+
+
+block head
+    title Basketball App
+
+    //Styles
+    link(rel='stylesheet', href='/stylesheets/basketball.css')
+    link(rel='stylesheet', href='/stylesheets/vendor/colorpicker.css')
+    link(rel='stylesheet', href='/stylesheets/vendor/jquery-ui.css')
+
+
+block require
+    script(type="text/javascript").
+
+        requirejs.onError = function(e){
+            console.log(e);
+        }
+
+        //faz load do aplicativo Customer (para funcionar direito só pode ter o load da Store aqui)
+        require(['Basketball']);
+
+
+block body
+    div#main
+        div#top
+        div#mid
+        div#bot
+    block main-page

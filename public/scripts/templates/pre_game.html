@@ -1,0 +1,42 @@
+<div id="top">
+    <div class="date"><%= moment(game.date).format('DD/MM/YYYY')%></div>
+    <div class="title"><%= ' - ' + game.name %></div>
+    <div class="buttons">
+        <button class="pre">Pré</button>
+        <button class="in">Jogo</button>
+        <button class="pos">Pós</button>
+        <button class="back">↑</button>
+    </div>
+</div>
+<div id="mid">
+    <div class="playersContainer">
+        <div class="playersContainerLeft">
+            <h1>Meu Time</h1>
+            <table class="playerTable">
+                <tr>
+                    <th class="action"></th>
+                    <th class="number">Número</th>
+                    <th class="name">Nome</th>
+                    <th class="position">Posição</th>
+                </tr>
+            </table>
+            <button class="add">+</button>
+        </div>
+        <div class="playersContainerRight">
+            <h1>Time Oponente</h1>
+            <table class="playerTable">
+                <tr>
+                    <th class="action"></th>
+                    <th class="number">Número</th>
+                    <th class="name">Nome</th>
+                    <th class="position">Posição</th>
+                </tr>
+            </table>
+            <button class="add">+</button>
+        </div>
+
+
+    </div>
+
+</div>
+<div id="bot"></div>
