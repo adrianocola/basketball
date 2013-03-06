@@ -126,9 +126,6 @@ define([
                 Utils.startHistory(app_router);
             }
 
-
-
-
         }});
 
 
