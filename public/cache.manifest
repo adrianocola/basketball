@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# rev 56
+# rev 59
 /favicon.ico
 /images/court.jpg
 /images/icon.png
@@ -7,7 +7,6 @@ CACHE MANIFEST
 /images/select.png
 
 /stylesheets/basketball.css
-/stylesheets/vendor/colorpicker.css
 /stylesheets/vendor/jquery-ui.css
 
 /scripts/templates/error.html
@@ -25,21 +24,10 @@ CACHE MANIFEST
 /scripts/vendor/jquery.js
 /scripts/vendor/jquery-ui.js
 /scripts/vendor/jquery-ui.touch.js
-/scripts/vendor/jquery.form.js
-/scripts/vendor/jquery.easing.js
-/scripts/vendor/jquery.inputmask.js
-/scripts/vendor/jquery.inputmask.date.js
-/scripts/vendor/jquery.inputmask.numeric.js
 /scripts/vendor/underscore.js
 /scripts/vendor/backbone.js
 /scripts/vendor/backbone.offline.js
-/scripts/vendor/underscore.mixin.deepExtend.js
-/scripts/vendor/deep-models.js
-/scripts/vendor/spin.js
-/scripts/vendor/colorpicker.js
-/scripts/vendor/modernizr.js
 /scripts/vendor/moment.js
-/scripts/vendor/accounting.js
 
 
 /scripts/basketball/basketball.js

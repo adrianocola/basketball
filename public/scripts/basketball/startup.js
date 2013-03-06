@@ -4,15 +4,12 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'accounting',
     'moment',
     'Views',
-    'jquery-ui',
-    'jquery.inputmask'
+    'jquery-ui'
 ], function($,
             _,
             Backbone,
-            accounting,
             moment,
             Views){
 
@@ -82,22 +79,6 @@ define([
         showMonthAfterYear: false,
         yearSuffix: ''};
     $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
-
-    //configura o accounting para os padrões brasileiros
-    accounting.settings = {
-        currency: {
-            symbol : "R$",   // default currency symbol is '$'
-            format: "%s%v", // controls output: %s = symbol, %v = value/number (can be object: see below)
-            decimal : ",",  // decimal point separator
-            thousand: ".",  // thousands separator
-            precision : 2   // decimal places
-        },
-        number: {
-            precision : 0,  // default precision on numbers is 0
-            thousand: ".",
-            decimal : ","
-        }
-    }
 
     //configura o moment.js para os padrões brasileiros
     moment.lang('pt-br', {

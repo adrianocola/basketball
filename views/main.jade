@@ -26,7 +26,6 @@ html(manifest="/cache.manifest")
 
         //Styles
         link(rel='stylesheet', href='/stylesheets/basketball.css')
-        link(rel='stylesheet', href='/stylesheets/vendor/colorpicker.css')
         link(rel='stylesheet', href='/stylesheets/vendor/jquery-ui.css')
 
         script(src="/online.js")
@@ -45,21 +44,10 @@ html(manifest="/cache.manifest")
                     "jquery": "/scripts/vendor/jquery",
                     "jquery-ui": "/scripts/vendor/jquery-ui",
                     "jquery-ui.touch": "/scripts/vendor/jquery-ui.touch",
-                    "jquery.form": "/scripts/vendor/jquery.form",
-                    "jquery.easing": "/scripts/vendor/jquery.easing",
-                    "jquery.inputmask": "/scripts/vendor/jquery.inputmask",
-                    "jquery.inputmask.date": "/scripts/vendor/jquery.inputmask.date",
-                    "jquery.inputmask.numeric": "/scripts/vendor/jquery.inputmask.numeric",
                     "underscore": "/scripts/vendor/underscore",
                     "backbone": "/scripts/vendor/backbone",
                     "backbone.offline": "/scripts/vendor/backbone.offline",
-                    "underscore.mixin.deepExtend": "/scripts/vendor/underscore.mixin.deepExtend",
-                    "deep-models": "/scripts/vendor/deep-models",
-                    "spin": "/scripts/vendor/spin",
-                    "colorpicker": "/scripts/vendor/colorpicker",
-                    "modernizr": "/scripts/vendor/modernizr",
                     "moment": "/scripts/vendor/moment",
-                    "accounting": "/scripts/vendor/accounting",
 
 
                     "Basketball": "/scripts/basketball/basketball",
@@ -82,39 +70,11 @@ html(manifest="/cache.manifest")
                         deps: ['underscore', 'backbone'],
                         exports: 'Offline'
                     },
-                    'deep-models': {
-                        deps: ['backbone','underscore','underscore.mixin.deepExtend'],
-                        exports: 'Backbone'
-                    },
-                    'colorpicker':{
-                        deps: ['jquery']
-                    },
                     'jquery-ui':{
                         deps: ['jquery']
                     },
                     'jquery-ui.touch':{
                         deps: ['jquery','jquery-ui']
-                    },
-                    'jquery.form':{
-                        deps: ['jquery']
-                    },
-                    'modernizr':{
-                        exports: 'Modernizr'
-                    },
-                    'moment':{
-                        exports: 'moment'
-                    },
-                    'jquery.inputmask':{
-                        deps: ['jquery']
-                    },
-                    'jquery.inputmask.numeric':{
-                        deps: ['jquery','jquery.inputmask']
-                    },
-                    'jquery.inputmask.date':{
-                        deps: ['jquery','jquery.inputmask']
-                    },
-                    'accounting':{
-                        exports: 'accounting'
                     }
                 }
             });

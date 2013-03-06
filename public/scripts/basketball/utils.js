@@ -4,7 +4,6 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'spin',
     'jquery-ui'
 ], function($,
             _,
