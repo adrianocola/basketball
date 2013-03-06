@@ -61,17 +61,23 @@ app.delete('/api/games/:id', function(req, res, next){
 
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
-        game.remove(function(err){
+        if(game){
+            game.remove(function(err){
 
-            if(err){ next(new app.errors.UnexpectedError(err)); return; }
+                if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
-            game._doc.id = game._doc._id;
-            delete game._doc._id;
+                game._doc.id = game._doc._id;
+                delete game._doc._id;
 
-            res.json(game);
+                res.json(game);
 
 
-        });
+            });
+        }else{
+            res.json(false);
+        }
+
+
 
 
     });

@@ -329,6 +329,7 @@
                 if (options == null) {
                     options = {};
                 }
+
                 return this.ajax('read', this.collection.items, _.extend({}, options, {
                     success: function(model, response, opts) {
                         var item, _i, _len;
@@ -338,6 +339,7 @@
                             _this.pullItem(item);
                         }
                         if (options.success) {
+                            _this.storage.collection.trigger('pull');
                             return options.success(model, response, opts);
                         }
                     }

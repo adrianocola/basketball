@@ -102,23 +102,32 @@ define([
 
         var collection = new Models.GameCollection();
 
-        var init1 = false;
-        var init2 = false;
+
+
+        var init = false;
 
         collection.fetch({local: basketball.offline?true:false, success: function(){
 
-            if(init1) return;
+            if(init) return;
 
-            init1 = true;
+            init = true;
 
-            collection.storage.sync.pull({success: function(){
+            if(basketball.online){
+                collection.on('pull',function(){
+                    var app_router = new AppRouter(collection);
 
+                    //inicializa controle de histórico (verifica se pode usar push state)
+                    Utils.startHistory(app_router);
+                });
+            }else{
                 var app_router = new AppRouter(collection);
 
                 //inicializa controle de histórico (verifica se pode usar push state)
                 Utils.startHistory(app_router);
+            }
 
-            }});
+
+
 
         }});
 
