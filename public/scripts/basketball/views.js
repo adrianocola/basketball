@@ -56,6 +56,7 @@ define(['jquery',
 
                 this.$el.html(this.template());
 
+                this.collection.sort();
                 this.collection.each(function(game){
                     that.$('#listContainer').append(new GamesListItem({model: game, collection: that.collection}).render().el);
                 });

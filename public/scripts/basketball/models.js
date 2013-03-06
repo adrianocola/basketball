@@ -51,6 +51,10 @@ define(['jquery',
 
             this.storage = new Offline.Storage('games', this, {autoPush: basketball.online?true:false});
 
+        },
+
+        comparator: function(model) {
+            return -new Date(model.get("date")).getTime();
         }
 
 
