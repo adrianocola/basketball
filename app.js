@@ -47,7 +47,6 @@ app.configure(function(){
     app.set('view engine', 'jade');
     app.use(stylus.middleware({ src: __dirname + '/public', compile: compile_nib}));
     app.use(express.static(__dirname + '/public'));
-    app.use(express.static(__dirname + '/public-static',{ maxAge: 604800000 })); //TODO configurar cache nessa pasta
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());

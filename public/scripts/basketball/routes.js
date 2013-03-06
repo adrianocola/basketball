@@ -91,7 +91,6 @@ define([
     });
 
     var initialize = function(){
-        console.log("INIT");
 
         if(basketball.online){
             console.log('Executando em modo ONLINE');
@@ -103,13 +102,27 @@ define([
 
         var collection = new Models.GameCollection();
 
-        collection.fetch({local: basketball.offline?true:false, success: function(){
-            var app_router = new AppRouter(collection);
+        var init1 = false;
+        var init2 = false;
 
-            //inicializa controle de histórico (verifica se pode usar push state)
-            Utils.startHistory(app_router);
+        collection.fetch({local: basketball.offline?true:false, success: function(){
+
+            if(init1) return;
+
+            init1 = true;
+
+            collection.storage.sync.pull({success: function(){
+
+                var app_router = new AppRouter(collection);
+
+                //inicializa controle de histórico (verifica se pode usar push state)
+                Utils.startHistory(app_router);
+
+            }});
 
         }});
+
+
 
 
     };

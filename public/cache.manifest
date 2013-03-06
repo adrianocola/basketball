@@ -1,7 +1,10 @@
 CACHE MANIFEST
-# rev 34
+# rev 56
 /favicon.ico
 /images/court.jpg
+/images/icon.png
+/images/splash.png
+/images/select.png
 
 /stylesheets/basketball.css
 /stylesheets/vendor/colorpicker.css
@@ -47,4 +50,7 @@ CACHE MANIFEST
 /scripts/basketball/utils.js
 
 NETWORK:
-*
+api/*
+api/games
+api/games/*
+/online.js

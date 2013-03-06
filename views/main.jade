@@ -5,7 +5,9 @@ html(manifest="/cache.manifest")
 
     head
 
-        title Basketball App
+        title Basketball
+
+        meta(name="apple-mobile-web-app-capable",content="yes")
 
         script(type="text/javascript").
             //workspace do basketball
@@ -17,6 +19,9 @@ html(manifest="/cache.manifest")
             now: "#{env.now}"
             };
 
+        link(rel="apple-touch-icon",href="images/icon.png")
+
+        link(rel="apple-touch-startup-image",href="images/splash.png")
 
 
         //Styles
