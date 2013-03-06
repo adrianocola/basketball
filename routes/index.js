@@ -101,7 +101,7 @@ app.get('/security', function(req, res, next){
 
 app.post('/check_security', function(req, res, next){
 
-    if(req.body.key == 'senha'){
+    if(req.body.key == 'kadu123'){
         res.json({key: app.env.key});
     }else{
         res.json({key: false});
