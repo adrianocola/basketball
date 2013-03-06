@@ -811,6 +811,9 @@ define(['jquery',
                         this.trigger('disabled',this);
                     }
                     this.disabled = !this.disabled;
+                }else if(this.shot){
+                    $('.token.selected').removeClass('selected');
+                    this.$el.addClass('selected');
                 }
 
             },
