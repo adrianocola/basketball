@@ -1,0 +1,61 @@
+!!!
+
+
+html
+
+    head
+
+        title Basketball
+
+        meta(name="apple-mobile-web-app-capable",content="yes")
+
+
+        //Styles
+        link(rel='stylesheet', href='/stylesheets/basketball.css')
+        script(type="text/javascript", src='/scripts/vendor/jquery.js')
+
+
+        script(type="text/javascript").
+            $(function(){
+
+                var req = function(){
+
+                    var key = $('#security input').val();
+
+                    $.ajax({
+                        type: 'POST',
+                        data: {key: key},
+                        url: '/check_security',
+                        success: function(msg){
+                            if(msg.key){
+                                window.localStorage.setItem('key',msg.key);
+                                window.location.href = '/';
+                            }else{
+                                $('#security').append('<div style="color: red">Chave de Segurança Incorreta!</div>');
+                            }
+                        }
+
+                    });
+
+                }
+
+                $('#security button').click(req);
+                $('#security input').keyup(function(evt){
+                    if(evt.keyCode===13){
+                        req();
+                    }
+                });
+
+            })
+
+
+
+    body
+
+
+
+        div#security
+            h2 Chave de Segurança
+            input(type="password")
+            button.buttonOrange.selected Entrar
+

@@ -1,10 +1,20 @@
 
 
-require(['jquery','Routes', 'Startup'], function($,Routes) {
+require(['jquery','underscore','Routes', 'Startup'], function($,_,Routes) {
 
-        $('body').css('display','block');
+        if(!window.localStorage.getItem('key')){
+            window.location.href = '/security';
+        }else{
 
-        Routes.initialize();
+            $.ajaxSetup({
+                headers: {'X-Basketball-Key': window.localStorage.getItem('key')}
+            });
+            $('body').css('display','block');
+
+            Routes.initialize();
+        }
+
+
 
         return {};
     }

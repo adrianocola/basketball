@@ -2,7 +2,19 @@ var app = require('../app')
     ,  fs = require('fs')
     ,  u = require('underscore');
 
-app.get('/api/games', function(req, res, next){
+var checkKey = function(req, res, next){
+
+    if(req.headers['x-basketball-key']===app.env.key){
+        next();
+    }else{
+        next(new app.errors.ExpectedError(100,'Usuário não autorizado'));
+    }
+
+
+}
+
+
+app.get('/api/games', checkKey, function(req, res, next){
 
     app.models.Game.find(function(err,games){
 
@@ -20,7 +32,7 @@ app.get('/api/games', function(req, res, next){
 
 });
 
-app.post('/api/games', function(req, res, next){
+app.post('/api/games', checkKey, function(req, res, next){
 
     var game = new app.models.Game(req.body);
 
@@ -37,7 +49,7 @@ app.post('/api/games', function(req, res, next){
 
 });
 
-app.put('/api/games/:id', function(req, res, next){
+app.put('/api/games/:id', checkKey, function(req, res, next){
 
 
     app.models.Game.findOneAndUpdate({_id: req.params.id},{$set: req.body},function(err,game){
@@ -54,7 +66,7 @@ app.put('/api/games/:id', function(req, res, next){
 
 });
 
-app.delete('/api/games/:id', function(req, res, next){
+app.delete('/api/games/:id', checkKey, function(req, res, next){
 
 
     app.models.Game.findOne({_id: req.params.id},function(err,game){
@@ -77,14 +89,26 @@ app.delete('/api/games/:id', function(req, res, next){
             res.json(false);
         }
 
-
-
-
     });
 
 
 });
 
+app.get('/security', function(req, res, next){
+
+    res.render('security', {env: app.env });
+});
+
+app.post('/check_security', function(req, res, next){
+
+    if(req.body.key == 'senha'){
+        res.json({key: app.env.key});
+    }else{
+        res.json({key: false});
+    }
+
+
+});
 
 app.get('*', function(req, res, next){
 

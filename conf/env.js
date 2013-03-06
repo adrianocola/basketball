@@ -12,19 +12,18 @@ env.node_env = process.env.NODE_ENV || 'development';
 env.port = parseInt(process.env.PORT) || 3000;
 env.mongo_url = process.env.MONGOLAB_URI || 'mongodb://localhost/basketball';
 
+env.key = 'aEpU5HJMoUaILavi3sKMnk';
+env.invalidKeys = [];
+
 if (env.development) {
 
     env.url = "https://adrianocola.no-ip.org:" + env.port + "/";
     env.session = 'session';
-    env.salt = 'gEaQuBoHLkZf01vLlRJpmG';
 
 } else {
 
-
     env.url = "http://truphy.herokuapp.com/";
     env.session = 'session';
-    env.salt = 'ZTCSj2ngRy4dySbwhkxJ3W';
-
 
 }
 
