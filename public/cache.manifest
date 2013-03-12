@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# rev 124
+# rev 125
 
 /favicon.ico
 /images/court.jpg
@@ -21,7 +21,7 @@ CACHE MANIFEST
 /images/jquery-ui/ui-icons_cd0a0a_256x240.png
 
 /stylesheets/basketball.css
-/stylesheets/vendor/jquery-ui.css
+/stylesheets/jquery-ui.css
 
 /scripts/templates/error.html
 /scripts/templates/games_list.html
