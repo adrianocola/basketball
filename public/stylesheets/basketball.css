@@ -344,6 +344,7 @@ em{font-weight:bold;text-decoration:underline}
 #main #top{margin:20px 0;height:40px}
 #main #mid{height:518px;background-image:url("/images/court.jpg")}
 #main #bot{margin:20px 0;height:40px}
+#status{text-align:center}
 #security{width:300px;height:auto;border:1px solid #aaa;-webkit-border-radius:10px;border-radius:10px;background-color:rgba(0,0,0,0.1);text-align:center;position:absolute;left:50%;top:40%;margin-left:-150px;margin-top:-75px;-webkit-box-shadow:2px 2px 4px rgba(0,0,0,0.3);box-shadow:2px 2px 4px rgba(0,0,0,0.3);padding-bottom:10px}
 #security h2{text-align:center;color:#444}
 #security input{display:inline-block;width:200px;margin:20px}

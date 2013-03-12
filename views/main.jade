@@ -38,16 +38,34 @@ html(manifest="/cache.manifest")
         script(type="text/javascript").
             // Check if a new cache is available on page load.
             window.addEventListener('load', function(e) {
-                window.applicationCache.addEventListener('updateready', function(e) {
-                    if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+
+                var appCache = window.applicationCache;
+
+                // Checking for an update. Always the first event fired in the sequence.
+                appCache.addEventListener('checking', function(e){
+                    $('#status').html('Buscando Atualizações...');
+                }, false);
+
+                // Fired after the first download of the manifest.
+                appCache.addEventListener('noupdate', function(){
+                    $('#status').html('Aplicativo já está na última versão!');
+                    $('#status').delay(5000).fadeOut();
+                }, false);
+
+                // Fired for each resource listed in the manifest as it is being fetched.
+                appCache.addEventListener('progress', function(e){
+                    $('#status').html('<b>Baixando Atualização</b>: ' + e.loaded + ' de ' + e.total);
+                }, false);
+
+
+                appCache.addEventListener('updateready', function(e) {
+                    if (appCache.status == appCache.UPDATEREADY) {
                         // Browser downloaded a new app cache.
                         // Swap it in and reload the page to get the new hotness.
-                        window.applicationCache.swapCache();
+                        appCache.swapCache();
                         if (confirm('Uma nova versão do site está disponível. Deseja carregá-la?')) {
                             window.location.reload();
                         }
-                    } else {
-                        // Manifest didn't changed. Nothing new to server.
                     }
                 }, false);
 
@@ -114,5 +132,4 @@ html(manifest="/cache.manifest")
             div#top
             div#mid
             div#bot
-        block main-page
-
+        div#status teste de mensagem lixo

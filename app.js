@@ -89,7 +89,6 @@ io.configure(function () {
     io.set('browser client cache', true);
     io.set('browser client minification', true);
     io.set('browser client gzip', true);
-
 });
 
 io.sockets.on('connection', function (socket) {
