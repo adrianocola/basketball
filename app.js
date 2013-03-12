@@ -79,6 +79,28 @@ app.configure('production', function(){
 
 var server = http.createServer(app).listen(app.env.port);
 
+
+var io = app.io = require('socket.io').listen(server);
+//configuração para não usar WebSockets (não suportado ainda pelo Heroku)
+io.configure(function () {
+    io.set("transports", ["xhr-polling"]);
+    io.set("polling duration", 10);
+    io.set('log level', 1);
+    io.set('browser client cache', true);
+    io.set('browser client minification', true);
+    io.set('browser client gzip', true);
+
+});
+
+io.sockets.on('connection', function (socket) {
+
+    //console.log("connect");
+
+    socket.on('disconnect', function () {
+        //console.log("disconnect");
+    });
+});
+
 console.log("(%s) Express server listening on port %d in %s mode", deps.version, app.env.port, app.env.type_str);
 
 setInterval(function(){

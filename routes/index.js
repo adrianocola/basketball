@@ -45,6 +45,8 @@ app.post('/api/games', checkKey, function(req, res, next){
 
         res.json(game);
 
+        app.io.sockets.emit('new_game',game);
+
     });
 
 });
@@ -60,6 +62,8 @@ app.put('/api/games/:id', checkKey, function(req, res, next){
         delete game._doc._id;
 
         res.json(game);
+
+        app.io.sockets.emit('game_change:' + game._doc.id,game);
 
     });
 
@@ -82,6 +86,8 @@ app.delete('/api/games/:id', checkKey, function(req, res, next){
                 delete game._doc._id;
 
                 res.json(game);
+
+                app.io.sockets.emit('game_delete:' + game._doc.id,game);
 
 
             });

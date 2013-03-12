@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# rev 125
+# rev 224
 
 /favicon.ico
 /images/court.jpg
@@ -52,7 +52,4 @@ CACHE MANIFEST
 /scripts/basketball/utils.js
 
 NETWORK:
-api/*
-api/games
-api/games/*
-/online.js
+*

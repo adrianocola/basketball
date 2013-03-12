@@ -100,6 +100,11 @@ define([
             basketball.offline = true;
         }
 
+        if(basketball.online ){
+            basketball.socket = io.connect();
+        }
+
+
         var collection = new Models.GameCollection();
 
 
