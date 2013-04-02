@@ -94,8 +94,6 @@ define(['jquery',
                     var isSource = false;
 
                     collection.each(function(_game){
-                        console.log(_game.get('updated_at'));
-                        console.log(game.updated_at);
                         if(game.id === _game.get('sid') || game.updated_at == _game.get('updated_at')){
                             isSource = true;
                         }

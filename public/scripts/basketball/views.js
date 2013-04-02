@@ -81,7 +81,6 @@ define(['jquery',
                 this.template = _.template(GamesListItemTemplate);
 
                 this.model.on('update',function(){
-                    console.log("UPDATE GAMELIST");
                     this.render();
                 },this);
 
@@ -202,7 +201,6 @@ define(['jquery',
                 this.template = _.template(PreGameTemplate);
 
                 this.model.on('update',function(model){
-                    console.log("UPDATE PREGAME");
                     this.render();
                 },this);
 
@@ -474,7 +472,6 @@ define(['jquery',
                 this.template = _.template(InGameTemplate);
 
                 this.model.on('update',function(){
-                    console.log("UPDATE INGAME");
                     this.update();
                 },this);
             },
@@ -1132,12 +1129,10 @@ define(['jquery',
             },
 
             gotoHome: function(){
-                console.log('home');
                 window.location.href = '/';
             },
 
             refreshPage: function(){
-                console.log('refresh');
                 window.location.reload(true);
             },
 
