@@ -95,6 +95,7 @@
                     options = {};
                 }
                 options.regenerateId = true;
+
                 return this.save(model, options);
             };
 

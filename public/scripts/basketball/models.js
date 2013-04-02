@@ -27,18 +27,18 @@ define(['jquery',
                 //se está sendo criado agora espera voltar do server para pegar um ID e assim esperar mudanças
                 }else{
                     this.collection.once('sync',this.registerUpdate);
-
                 }
-
-                basketball.socket.on('game_delete:' + this.get('sid'), function(game){
-                    model.trigger('delete');
-                });
             }
 
         },
 
         registerUpdate: function(){
             var model = this;
+
+            basketball.socket.on('game_delete:' + model.get('sid'), function(game){
+                model.trigger('delete');
+            });
+
             basketball.socket.on('game_change:' + model.get('sid'), function(game){
                 //verifica se é outra versão (compara as datas de modificação)
                 if(game.updated_at > model.get('updated_at')){
@@ -94,7 +94,9 @@ define(['jquery',
                     var isSource = false;
 
                     collection.each(function(_game){
-                        if(game.id === _game.get('sid')){
+                        console.log(_game.get('updated_at'));
+                        console.log(game.updated_at);
+                        if(game.id === _game.get('sid') || game.updated_at == _game.get('updated_at')){
                             isSource = true;
                         }
                     });
