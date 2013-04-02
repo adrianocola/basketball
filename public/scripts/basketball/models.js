@@ -41,7 +41,7 @@ define(['jquery',
             var model = this;
             basketball.socket.on('game_change:' + model.get('sid'), function(game){
                 //verifica se é outra versão (compara as datas de modificação)
-                if(game.updated_at != model.get('updated_at')){
+                if(game.updated_at > model.get('updated_at')){
 
                     model.set('sid',game.id);
                     model.set('dirty',false);
