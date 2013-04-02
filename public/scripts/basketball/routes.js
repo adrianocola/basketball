@@ -120,7 +120,7 @@ define([
             if(basketball.online){
                 var start = false;
 
-                collection.on('pull',function(){
+                collection.once('pull',function(){
                     if(start) return;
                     start = true;
                     var app_router = new AppRouter(collection);
@@ -128,7 +128,7 @@ define([
                     //inicializa controle de histórico (verifica se pode usar push state)
                     Utils.startHistory(app_router);
                 });
-                collection.on('reset',function(){
+                collection.once('reset',function(){
                     if(start) return;
                     start = true;
                     var app_router = new AppRouter(collection);

@@ -120,12 +120,24 @@ define(['jquery',
 
             initialize: function(options){
 
+                var that = this;
+
                 _.bindAll(this);
 
                 this.gameId = options.gameId;
 
                 if(this.gameId === "new_game"){
-                    this.model = this.collection.create();
+                    this.model = this.collection.create({
+                        name: "Novo Jogo",
+                        date: Utils.now(),
+                        updated_at: null,
+                        mTeam:{},
+                        oTeam: {},
+                        mShots: {},
+                        oShots: {},
+                        opts: {}
+
+                    });
                 }else{
                     //teta buscar primeiro pelo ID externo, do DB
                     this.model = this.collection.getBySid(this.gameId);
@@ -135,9 +147,18 @@ define(['jquery',
                     }
 
                 }
+
+                this.model.once('sync',function(model){
+                    that.render();
+                })
             },
 
             render: function(where){
+
+                //se ainda não foi salvo no server não exibe o jogo ainda
+                if(basketball.online && this.model.get('sid') === "new"){
+                    return this;
+                }
 
                 where = where || this.options.where;
 
@@ -212,6 +233,7 @@ define(['jquery',
                 this.$('#top .title').html('- <input class="editTitle" value="' + this.model.get('name') + '"/>');
 
                 this.$('#top .title').addClass('editing');
+                this.$('#top .editTitle').focus().select();
             },
 
             updateTitle: function(evt){
