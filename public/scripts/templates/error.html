@@ -1,9 +1,15 @@
 <div id="commonErrorBlanket"/>
 <div id="commonErrorDialog">
-    <h2 id="commonErrorTitle"><%= options.title?options.title:"Ops... alguma coisa deu errada!" %></h2>
+    <h2 id="commonErrorTitle"><%= options.title?options.title:"Erro!" %></h2>
     <div id="commonErrorMsg"><%= options.msg?options.msg:"" %></div>
     <div id="commonErrorButtons">
-        <button id="commonErrorHome" class="buttonBlue">Página Inicial</button>
-        <button id="commonErrorRefresh" class="buttonBlue">Atualizar</button>
+        <%if(options.action==="login"){%>
+        <a href="/login"><button class="buttonOrange selected">Página de Login</button></a>
+        <%}else if(options.action==="refresh"){%>
+        <a href=""javascript:history.go(0);""><button class="buttonOrange selected">Atualizar Página</button></a>
+        <%}else if(options.action==="none"){%>
+        <%}else{%>
+        <a href="/"><button class="buttonOrange selected">Página Inicial</button></a>
+        <%}%>
     </div>
 </div>

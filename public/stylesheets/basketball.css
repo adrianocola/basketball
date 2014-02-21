@@ -269,7 +269,8 @@ body{-webkit-backface-visibility:hidden}
 100%{opacity:0;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);filter:alpha(opacity=0)}
 }@keyframes fadeOut{0%{opacity:1;-ms-filter:none;filter:none}
 100%{opacity:0;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);filter:alpha(opacity=0)}
-}.buttonDelete{background-color:#000;background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #4e5255), color-stop(1, #363a3d));background:-webkit-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:-moz-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:-o-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:-ms-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:linear-gradient(top, #4e5255 0%, #363a3d 100%);color:#fff;border:2px solid #fff;-webkit-border-radius:25px;border-radius:25px;width:20px;height:20px;line-height:20px;font-size:14px;text-align:center;font-weight:bold;-webkit-box-shadow:1px 1px 5px #000;box-shadow:1px 1px 5px #000;cursor:hand;cursor:pointer}
+}button{outline:none}
+.buttonDelete{background-color:#000;background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #4e5255), color-stop(1, #363a3d));background:-webkit-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:-moz-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:-o-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:-ms-linear-gradient(top, #4e5255 0%, #363a3d 100%);background:linear-gradient(top, #4e5255 0%, #363a3d 100%);color:#fff;border:2px solid #fff;-webkit-border-radius:25px;border-radius:25px;width:20px;height:20px;line-height:20px;font-size:14px;text-align:center;font-weight:bold;-webkit-box-shadow:1px 1px 5px #000;box-shadow:1px 1px 5px #000;cursor:hand;cursor:pointer}
 .buttonDelete:hover{background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #4e5255), color-stop(1, #363a3d));background:-webkit-linear-gradient(bottom, #4e5255 0%, #363a3d 100%);background:-moz-linear-gradient(bottom, #4e5255 0%, #363a3d 100%);background:-o-linear-gradient(bottom, #4e5255 0%, #363a3d 100%);background:-ms-linear-gradient(bottom, #4e5255 0%, #363a3d 100%);background:linear-gradient(bottom, #4e5255 0%, #363a3d 100%)}
 .buttonSimple{background-color:#fff;border:1px solid #bbb;-webkit-border-radius:6px;border-radius:6px;color:#333;padding:4px 6px}
 .buttonSimple:hover{-webkit-box-shadow:0 0 5px 0 rgba(0,0,0,0.4);box-shadow:0 0 5px 0 rgba(0,0,0,0.4)}
@@ -279,11 +280,11 @@ body{-webkit-backface-visibility:hidden}
 .buttonRed,.buttonRedX{min-width:40px;height:24px;padding:0 10px 0 10px;-webkit-box-shadow:inset 0 1px 1px rgba(255,255,255,0.66),0 1px 1px rgba(70,70,70,0.19);box-shadow:inset 0 1px 1px rgba(255,255,255,0.66),0 1px 1px rgba(70,70,70,0.19);background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #b01111), color-stop(0.21600000000000003, #c71919), color-stop(1, #de2222));background:-webkit-linear-gradient(bottom, #b01111 0%, #c71919 21.6%, #de2222 100%);background:-moz-linear-gradient(bottom, #b01111 0%, #c71919 21.6%, #de2222 100%);background:-o-linear-gradient(bottom, #b01111 0%, #c71919 21.6%, #de2222 100%);background:-ms-linear-gradient(bottom, #b01111 0%, #c71919 21.6%, #de2222 100%);background:linear-gradient(bottom, #b01111 0%, #c71919 21.6%, #de2222 100%);-webkit-border-radius:8px;border-radius:8px;border:1px solid #960e0e;color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.2);font:bold 12px/30px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;text-align:center;line-height:20px;cursor:pointer;vertical-align:top}
 .buttonRedX{min-width:24px;-webkit-border-radius:25px;border-radius:25px;padding:0}
 .buttonRed:active{background-image:-webkit-gradient(linear, left bottom, left top, color-stop(0, #c71919), color-stop(0.8740000000000001, #de2222));background-image:-webkit-linear-gradient(bottom, #c71919 0%, #de2222 87.4%);background-image:-moz-linear-gradient(bottom, #c71919 0%, #de2222 87.4%);background-image:-o-linear-gradient(bottom, #c71919 0%, #de2222 87.4%);background-image:-ms-linear-gradient(bottom, #c71919 0%, #de2222 87.4%);background-image:linear-gradient(bottom, #c71919 0%, #de2222 87.4%);-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.59);box-shadow:inset 0 1px 2px rgba(0,0,0,0.59)}
-.buttonOrange{min-width:40px;padding:3px 10px;-webkit-box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 2px 2px rgba(0,0,0,0.3);box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 2px 2px rgba(0,0,0,0.3);background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #ff7f00), color-stop(0.262, #ff9600));background:-webkit-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-moz-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-o-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-ms-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);-webkit-border-radius:8px;border-radius:8px;position:relative;border:3px solid #fff;color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.2);font:bold 16px/30px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;text-align:center;line-height:20px;cursor:pointer;vertical-align:top}
+.buttonOrange{min-width:40px;padding:3px 10px;-webkit-box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 2px 2px rgba(0,0,0,0.3);box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 2px 2px rgba(0,0,0,0.3);background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #ff7f00), color-stop(0.262, #ff9600));background:-webkit-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-moz-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-o-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-ms-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);-webkit-border-radius:8px;border-radius:8px;position:relative;border:3px solid #fff;color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.2);font:bold 16px/30px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;text-align:center;line-height:20px;cursor:pointer;vertical-align:top;height:32px}
 .buttonOrange:active{background:-webkit-gradient(linear, left bottom, left top, color-stop(0.725, #ff9600), color-stop(1, #ff7f00));background:-webkit-linear-gradient(bottom, #ff9600 72.5%, #ff7f00 100%);background:-moz-linear-gradient(bottom, #ff9600 72.5%, #ff7f00 100%);background:-o-linear-gradient(bottom, #ff9600 72.5%, #ff7f00 100%);background:-ms-linear-gradient(bottom, #ff9600 72.5%, #ff7f00 100%);background:linear-gradient(bottom, #ff9600 72.5%, #ff7f00 100%);-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.2);box-shadow:0 1px 1px rgba(0,0,0,0.2)}
 .buttonOrange:not(.selected){background:#aaa}
 .buttonOrange:not(.selected):hover{background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #ff7f00), color-stop(0.262, #ff9600));background:-webkit-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-moz-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-o-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:-ms-linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%);background:linear-gradient(bottom, #ff7f00 0%, #ff9600 26.2%)}
-button[disabled="disabled"]{min-width:70px;height:24px;padding:0 10px 0 10px;-webkit-box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 1px 1px rgba(70,70,70,0.19);box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 1px 1px rgba(70,70,70,0.19);background:#ddd;-webkit-border-radius:8px;border-radius:8px;position:relative;border:1px solid #bbb;color:#999;text-shadow:0 -1px 0 rgba(255,255,255,0.2);font:bold 12px/30px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;text-align:center;line-height:20px;cursor:auto}
+button[disabled="disabled"]{min-width:70px;height:32px;-webkit-box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 1px 1px rgba(70,70,70,0.19);box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 1px 1px rgba(70,70,70,0.19);background:#ddd;-webkit-border-radius:8px;border-radius:8px;position:relative;border:1px solid #bbb;color:#999;text-shadow:0 -1px 0 rgba(255,255,255,0.2);font:bold 12px/30px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;text-align:center;line-height:20px;cursor:auto}
 button[disabled="disabled"]:active{-webkit-box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 1px 1px rgba(70,70,70,0.19);box-shadow:inset 0 1px 2px rgba(255,255,255,0.45),0 1px 1px rgba(70,70,70,0.19);background:#ddd;cursor:default}
 .fieldValidateIcon{position:relative;margin-right:-16px;left:6px}
 input[type="text"],input[type="email"],input[type="password"],textarea{font-size:12px;padding:4px 5px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #bbb;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:none;box-shadow:none}
@@ -333,21 +334,22 @@ button.fd-slider-handle:focus::-moz-focus-inner{border-color:transparent}
 .helpTitle{text-align:center;font-size:14px;margin-bottom:5px;font-weight:bold;text-decoration:underline}
 .helpText{text-align:justify}
 div#commonErrorBlanket{background-color:#111;opacity:.5;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50);filter:alpha(opacity=50);position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999}
-#commonErrorDialog{position:fixed;left:35%;top:20%;margin-left:auto;margin-right:auto;width:300px;height:220px;border:1px solid #000;background-color:#fff;padding:10px 15px 10px 15px;-webkit-border-radius:10px;border-radius:10px;-webkit-box-shadow:0 2px 8px #000;box-shadow:0 2px 8px #000;z-index:10000}
-#commonErrorTitle{text-align:center}
-#commonErrorMsg{width:90%;margin-left:auto;margin-right:auto;text-align:justify}
-#commonErrorButtons{position:absolute;left:43px;bottom:20px}
+#commonErrorDialog{position:fixed;left:35%;top:20%;margin-left:auto;margin-right:auto;width:300px;border:1px solid #000;background-color:#fff;padding:10px 15px 10px 15px;-webkit-border-radius:10px;border-radius:10px;-webkit-box-shadow:0 2px 8px #000;box-shadow:0 2px 8px #000;z-index:10000}
+#commonErrorTitle{text-align:center;color:#ff7f00;font-size:24px}
+#commonErrorMsg{width:90%;margin-left:auto;margin-right:auto;text-align:center}
+#commonErrorButtons{text-align:center;margin-top:20px;margin-bottom:20px}
 body{font:12px "Lucida Grande",Helvetica,Arial,sans-serif;font-size:12px;font-weight:400;margin:0 0 0 0;padding:0;border:0;background-color:#fff}
 em{font-weight:bold;text-decoration:underline}
 .hidden{display:none}
+#logged{width:960px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden;text-align:right;padding-top:10px}
 #main{width:960px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden}
 #main #top{margin:20px 0;height:40px}
-#main #mid{height:518px;background-image:url("/images/court.jpg")}
+#main #mid{height:518px;background-image:url("/images/court.jpg");position:relative}
 #main #bot{margin:20px 0;height:40px}
 #status{text-align:center}
 #security{width:300px;height:auto;border:1px solid #aaa;-webkit-border-radius:10px;border-radius:10px;background-color:rgba(0,0,0,0.1);text-align:center;position:absolute;left:50%;top:40%;margin-left:-150px;margin-top:-75px;-webkit-box-shadow:2px 2px 4px rgba(0,0,0,0.3);box-shadow:2px 2px 4px rgba(0,0,0,0.3);padding-bottom:10px}
 #security h2{text-align:center;color:#444}
-#security input{display:inline-block;width:200px;margin:20px}
+#security input{display:inline-block;width:200px;margin:5px}
 #security button{display:inline-block;margin-bottom:10px}
 #gamelist #top .title{display:inline-block;font-size:32px}
 #gamelist #listContainer{width:auto;height:100%;background-color:rgba(255,255,255,0.8);padding:20px;overflow:auto;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
@@ -405,6 +407,7 @@ em{font-weight:bold;text-decoration:underline}
 #ingame .oTeam{float:right}
 #posgame #bot .date{display:inline-block;font-size:16px}
 #posgame #bot .title{display:inline-block;font-size:16px}
+#posgame .controls{margin-top:5px}
 #posgame .team{display:inline-block}
 #posgame .team .token{position:relative;display:inline-block;margin:0 2px;cursor:pointer}
 #posgame .oTeam{float:right}

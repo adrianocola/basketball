@@ -1,0 +1,113 @@
+!!!
+
+
+html
+
+    head
+
+        title Basketball
+
+        meta(name="apple-mobile-web-app-capable",content="yes")
+
+        script(type="text/plain",id="salt") U7eyidXvcl9dgXdLwXZfSV
+
+        //Styles
+        link(rel='stylesheet', href='/stylesheets/basketball.css')
+
+        //Scripts
+        script(type="text/javascript", src='/scripts/vendor/jquery.js')
+        script(type="text/javascript", src='/scripts/vendor/md5.js')
+        script(type="text/javascript", src='/scripts/vendor/spin.js')
+        script(type="text/javascript", src='/scripts/vendor/spinMe.js')
+
+
+        script(type="text/javascript").
+            $(function(){
+
+                var req = function(){
+
+                    $('#error').hide();
+
+                    var email = $('#email').val().toLowerCase();
+                    var password = $('#password').val();
+
+                    var missing = [];
+                    if(!password || password.length === 0){
+                        missing.push('senha');
+                    }
+
+                    if(!email || email.length === 0){
+                        missing.push('e-mail');
+                    }
+
+                    if(missing.length>0){
+                        $('#error').html("Faltando preencher " + missing.join(', '));
+                        return;
+                    }
+
+                    if(password.length<4){
+                        $('#error').html("Senha deve conter pelo menos 4 caracteres!");
+                        return;
+                    }
+
+                    if(!email.match(/\S+@\S+\.\S+/)){
+                        $('#error').html("Endereço de e-mail inválido!");
+                        return;
+                    }
+
+                    var stop = spinMe($("#login"));
+
+                    $.ajax({
+                        cache: false,
+                        url: "/api/nonce"
+                        }).success(function( nonce ) {
+
+                            var secure_password = md5.hex_md5(md5.hex_md5(email + $.trim($("#salt").html() + password)) + nonce);
+
+                            $.ajax({
+                                cache: false,
+                                data: "email=" + email + "&password=" + secure_password + "&nonce=" + nonce,
+                                url: "/api/user/login",
+                                success: function(msg){
+
+                                    window.localStorage.setItem("user",email);
+                                    window.location.href = '/';
+
+                                },
+                                error: function(xhr){
+                                    stop();
+                                    $('#error').show();
+                                    $('#error').html(xhr.responseText);
+                                }
+
+                            });
+
+                        });
+
+                }
+
+                $('#security button').click(req);
+                $('#security input').keyup(function(evt){
+                    if(evt.keyCode===13){
+                        req();
+                    }
+                });
+
+            })
+
+
+
+    body
+
+
+
+        div#security
+            h2 Login
+            input#email(type="text",placeholder="e-mail")
+            input#password(type="password",placeholder="senha")
+            br
+            button#login.buttonOrange.selected Entrar
+            div#error(style="color: red")
+            br
+            div Possui uma chave de acesso? Crie sua conta <a href="/signup">aqui</a>
+

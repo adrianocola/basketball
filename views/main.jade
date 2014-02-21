@@ -15,8 +15,7 @@ html(manifest="/cache.manifest")
                 env_production: #{env.production},
                 env_development: #{env.development},
                 env_local: #{env.local},
-                url: "#{env.url}",
-                now: "#{env.now}"
+                url: "#{env.url}"
             };
 
         link(rel="apple-touch-icon",href="images/icon.png")
@@ -128,7 +127,7 @@ html(manifest="/cache.manifest")
             require(['Basketball']);
 
     body(style="display:none;")
-
+        div#logged
         div#main
             div#top
             div#mid

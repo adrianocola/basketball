@@ -1,0 +1,120 @@
+!!!
+
+
+html
+
+    head
+
+        title Basketball
+
+        meta(name="apple-mobile-web-app-capable",content="yes")
+
+        script(type="text/plain",id="salt") U7eyidXvcl9dgXdLwXZfSV
+
+        //Styles
+        link(rel='stylesheet', href='/stylesheets/basketball.css')
+
+        //Scripts
+        script(type="text/javascript", src='/scripts/vendor/jquery.js')
+        script(type="text/javascript", src='/scripts/vendor/md5.js')
+        script(type="text/javascript", src='/scripts/vendor/spin.js')
+        script(type="text/javascript", src='/scripts/vendor/spinMe.js')
+
+
+        script(type="text/javascript").
+            $(function(){
+
+                var req = function(){
+
+                    $('#error').hide();
+
+                    var email = $('#email').val().toLowerCase();
+                    var key = $('#key').val();
+                    var password = $('#password').val();
+                    var password_confirm = $('#password_confirm').val();
+
+                    var missing = [];
+                    if(!password || password.length === 0){
+                        missing.push('senha');
+                    }
+                    if(!password_confirm || password_confirm.length === 0){
+                        missing.push('confirmar senha');
+                    }
+                    if(!email || email.length === 0){
+                        missing.push('e-mail');
+                    }
+
+                    if(!key || key.length === 0){
+                        missing.push('chave de acesso');
+                    }
+
+                    if(missing.length>0){
+                        $('#error').html("Faltando preencher " + missing.join(', '));
+                        return;
+                    }
+
+                    if(password.length<4){
+                        $('#error').html("Senha deve conter pelo menos 4 caracteres!");
+                        return;
+                    }
+
+                    if(!email.match(/\S+@\S+\.\S+/)){
+                        $('#error').html("Endereço de e-mail inválido!");
+                        return;
+                    }
+
+                    if(password != password_confirm){
+                        $('#error').html("Senhas precisam ser iguais!");
+                        return;
+                    }
+
+                    var stop = spinMe($("#signup"));
+
+
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        contentType: "application/json",
+                        data: '{"email":"' + email + '", "key":"' + key + '", "password":"' +  md5.hex_md5(email + $.trim($("#salt").html()) + password) + '"}',
+                        url: "/api/user/signup",
+                        success: function(msg){
+                            window.localStorage.setItem("user",email);
+                            window.location.href = '/';
+                        },
+                        error: function(xhr){
+                            stop();
+                            $('#error').show();
+                            $('#error').html(xhr.responseText);
+                        }
+
+                    });
+
+                }
+
+                $('#security button').click(req);
+                $('#security input').keyup(function(evt){
+                    if(evt.keyCode===13){
+                        req();
+                    }
+                });
+
+            })
+
+
+
+    body
+
+
+
+        div#security
+            h2 Criar Conta
+            input#email(type="text",placeholder="e-mail")
+            input#key(type="text",placeholder="chave de acesso")
+            input#password(type="password",placeholder="senha")
+            input#password_confirm(type="password",placeholder="confirmar senha")
+            br
+            button#signup.buttonOrange.selected Entrar
+            div#error(style="color: red")
+            br
+            div Já possui conta? Clique <a href="/login">aqui</a> para fazer login
+

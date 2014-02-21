@@ -2,21 +2,10 @@ var app = require('../app')
     ,  fs = require('fs')
     ,  u = require('underscore');
 
-var checkKey = function(req, res, next){
 
-    if(req.headers['x-basketball-key']===app.env.key){
-        next();
-    }else{
-        next(new app.errors.ExpectedError(100,'Usuário não autorizado'));
-    }
+app.get('/api/games', app.utils.verifyAuthorization, function(req, res, next){
 
-
-}
-
-
-app.get('/api/games', checkKey, function(req, res, next){
-
-    app.models.Game.find(function(err,games){
+    app.models.Game.find({user: req.session.userId}, function(err,games){
 
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
@@ -32,9 +21,10 @@ app.get('/api/games', checkKey, function(req, res, next){
 
 });
 
-app.post('/api/games', checkKey, function(req, res, next){
+app.post('/api/games', app.utils.verifyAuthorization, function(req, res, next){
 
     var game = new app.models.Game(req.body);
+    game.user = req.session.userId;
 
     game.save(function(err){
 
@@ -51,10 +41,10 @@ app.post('/api/games', checkKey, function(req, res, next){
 
 });
 
-app.put('/api/games/:id', checkKey, function(req, res, next){
+app.put('/api/games/:id', app.utils.verifyAuthorization, function(req, res, next){
 
 
-    app.models.Game.findOneAndUpdate({_id: req.params.id},{$set: req.body},function(err,game){
+    app.models.Game.findOneAndUpdate({_id: req.params.id, user: req.session.userId},{$set: req.body},function(err,game){
 
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
@@ -70,10 +60,10 @@ app.put('/api/games/:id', checkKey, function(req, res, next){
 
 });
 
-app.delete('/api/games/:id', checkKey, function(req, res, next){
+app.delete('/api/games/:id', app.utils.verifyAuthorization, function(req, res, next){
 
 
-    app.models.Game.findOne({_id: req.params.id},function(err,game){
+    app.models.Game.findOne({_id: req.params.id, user: req.session.userId},function(err,game){
 
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
@@ -100,25 +90,27 @@ app.delete('/api/games/:id', checkKey, function(req, res, next){
 
 });
 
-app.get('/security', function(req, res, next){
+app.get('/login', function(req, res, next){
 
-    res.render('security', {env: app.env });
+    res.render('login', {env: app.env });
 });
 
-app.post('/check_security', function(req, res, next){
+app.get('/signup', function(req, res, next){
 
-    if(req.body.key == 'kadu123'){
-        res.json({key: app.env.key});
-    }else{
-        res.json({key: false});
-    }
-
-
+    res.render('signup', {env: app.env });
 });
+
 
 app.get('*', function(req, res, next){
 
-    res.render('main', {env: app.env });
+
+
+    if(req.session && req.session.userId){
+        res.render('main', {session: req.session, env: app.env });
+    }else{
+        res.redirect('/login');
+    }
+
 });
 
 

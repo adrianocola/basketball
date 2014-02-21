@@ -17,15 +17,8 @@ define([
     //outro tratamento de erros. Pega erros genéricos e de conexão
     function error_handler(jqxhr, exception, error, fn){
 
-
-        try{
-            //coloca na propriedade truphy os erros relativos ao truphy que o servidor detecta
-            jqxhr.truphy = JSON.parse(jqxhr.responseText);
-            jqxhr.responseText = jqxhr.truphy.error;
-        }catch(e){}
-
-        if (jqxhr.truphy && jqxhr.truphy.code === 100) {
-            new Views.ErrorView({msg: jqxhr.truphy.error}).render();
+        if (jqxhr.status == 401) {
+            new Views.ErrorView({msg: "Sessão Expirada!", action: "login"}).render();
         } else if (jqxhr.status === 0) {
             new Views.ErrorView({msg: "Não foi possível estabelecer uma conexão com o servidor. Verifique sua conexão de internet"}).render();
         } else if (jqxhr.status == 404) {
@@ -58,6 +51,8 @@ define([
         }
 
     });
+
+
 
     //configura o datepicker do jqueryui para português do brasil
     $.datepicker.regional['pt-BR'] = {

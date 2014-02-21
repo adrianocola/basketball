@@ -9,6 +9,52 @@ define(['jquery',
                              Offline,
                              Utils) {
 
+    var UserModel = Backbone.Model.extend({
+
+        idAttribute: '_id',
+
+        url: '/api/user/data',
+
+        initialize: function(){
+
+            _.bindAll(this);
+
+        },
+
+        logout: function(options){
+            $.ajax('/api/user/logout',options);
+        },
+
+        getUser: function(options){
+
+            var that = this;
+
+            var success = options.success;
+            var error = options.error;
+
+            options.success = function(data,text,xhr){
+
+                that.set(data,{silent: true});
+
+                if(success){
+                    success(that,data,options);
+                }
+            }
+
+            options.error = function(xhr,text,error){
+
+                if(error){
+                    success(that,xhr,options);
+                }
+
+            }
+
+            $.ajax('/api/user/data',options);
+
+        }
+
+    });
+
     var GameModel = Backbone.Model.extend({
 
         urlRoot: '/api/games',
@@ -65,7 +111,7 @@ define(['jquery',
                 //id: {num: 1, name: 'teste', pos: 1}
             },
             mShots: {
-                //'player_id': { id: {date: now(), x: 123, y: 123}  }
+                //'player_id': { date: {date: now(), x: 123, y: 123, type: '0'}  }
             },
             oShots: {
 
@@ -140,6 +186,7 @@ define(['jquery',
 
     var exports = {};
 
+    exports.UserModel = UserModel;
     exports.GameModel = GameModel;
     exports.GameCollection = GameCollection;
 

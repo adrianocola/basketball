@@ -5,6 +5,7 @@ define(['jquery',
     'Models',
     'moment',
     'Utils',
+    'text!templates/user.html',
     'text!templates/games_list.html',
     'text!templates/games_list_item.html',
     'text!templates/pre_game.html',
@@ -21,6 +22,7 @@ define(['jquery',
              Models,
              moment,
              Utils,
+             UserTemplate,
              GameListTemplate,
              GamesListItemTemplate,
              PreGameTemplate,
@@ -29,6 +31,75 @@ define(['jquery',
              PosGameTemplate,
              PlayerTokenTemplate,
              ErrorTemplate) {
+
+
+        $(function(){
+
+            //detalhes dessa implementação: http://stackoverflow.com/questions/152975/how-to-detect-a-click-outside-an-element
+            $('html').click(function() {
+                $('.token.selected').removeClass('selected');
+            });
+
+        });
+
+        var UserView = Backbone.View.extend({
+
+            initialize: function(){
+
+                var that = this;
+
+                _.bindAll(this);
+
+                this.template = _.template(UserTemplate);
+
+                var user = new Models.UserModel({online: basketball.online});
+
+                if(basketball.online){
+                    user.getUser({success: function(){
+
+                        window.localStorage.setItem("user",user.get("email"));
+
+                        that.model = user;
+                        that.render();
+                    }});
+                }else{
+
+                    user.set("email",window.localStorage.getItem("user"));
+
+                    this.model = user;
+                    this.render();
+                }
+
+            },
+
+            events: {
+                'click .logout': 'logout'
+            },
+
+            logout: function(){
+
+                if(basketball.online){
+                    localStorage.clear();
+                    window.location = "/logout";
+                }else{
+                    if (confirm('Se você sair enquanto estiver no modo offline, todas as mudanças feitas serão perdidas e você só poderá usar o sistema novamente quando estiver conectado à internet! Tem certeza que deseja sair?')) {
+                        localStorage.clear();
+                        window.location = "/";
+                    }
+                }
+
+            },
+
+            render: function(){
+
+                if(!this.model) return this;
+
+                this.$el.html(this.template({user: this.model.toJSON()}));
+
+                return this;
+            }
+
+        });
 
         var GamesList = Backbone.View.extend({
 
@@ -40,9 +111,9 @@ define(['jquery',
 
                 this.template = _.template(GameListTemplate);
 
-                this.collection.on('add',function(model, collection){
+                this.listenTo(this.collection,'add',function(model, collection){
                     this.$('#listContainer').prepend(new GamesListItem({model: model, collection: collection}).render().el);
-                },this);
+                });
 
             },
 
@@ -80,14 +151,16 @@ define(['jquery',
 
                 this.template = _.template(GamesListItemTemplate);
 
-                this.model.on('update',function(){
-                    this.render();
-                },this);
 
-                this.model.on('delete',function(){
+
+                this.listenTo(this.model,'update',function(){
+                    this.render();
+                });
+
+                this.listenTo(this.model,'delete',function(){
                     this.collection.remove(this.model);
                     this.remove();
-                },this);
+                });
 
             },
 
@@ -148,9 +221,8 @@ define(['jquery',
 
                 }
 
-                this.model.once('sync',function(model){
-                    that.render();
-                })
+                this.current_view = null;
+
             },
 
             render: function(where){
@@ -162,26 +234,28 @@ define(['jquery',
 
                 where = where || this.options.where;
 
-                var view;
+                if(this.current_view){
+                    this.current_view.remove();
+                }
 
                 switch(where){
                     case 1:
-                        view = new PreGame({model: this.model, manager: this});
+                        this.current_view = new PreGame({model: this.model, manager: this});
                         break;
                     case 2:
-                        view = new InGame({model: this.model, manager: this});
+                        this.current_view = new InGame({model: this.model, manager: this});
                         break;
                     case 3:
-                        view = new PosGame({model: this.model, manager: this});
+                        this.current_view = new PosGame({model: this.model, manager: this});
                         break;
                     default:
-                        view = new PreGame({model: this.model, manager: this});
+                        this.current_view = new PreGame({model: this.model, manager: this});
                 }
 
-                this.$el.html(view.render().el);
+                this.$el.html(this.current_view.render().el);
 
-                if(view.afterAdd){
-                    setTimeout(view.afterAdd);
+                if(this.current_view.afterAdd){
+                    setTimeout(this.current_view.afterAdd);
                 }
 
                 return this;
@@ -200,9 +274,9 @@ define(['jquery',
 
                 this.template = _.template(PreGameTemplate);
 
-                this.model.on('update',function(model){
+                this.listenTo(this.model,'update',function(model){
                     this.render();
-                },this);
+                });
 
             },
 
@@ -278,8 +352,8 @@ define(['jquery',
             addUtil: function(my){
 
                 var playerView = new PlayerItem({model: {num: -1, name: '', position: 0}, pid: Utils.uniqueId()});
-                playerView.on('edit',this.edited);
-                playerView.on('remove',this.removed);
+                this.listenTo(playerView,'edit',this.edited);
+                this.listenTo(playerView,'remove',this.removed);
                 this.$((my?'.playersContainerLeft':'.playersContainerRight') + ' .playerTable tbody').append(playerView.render().el);
 
             },
@@ -369,8 +443,8 @@ define(['jquery',
 
                 _.each(game.mTeam,function(player, pid){
                     var playerView = new PlayerItem({model: player, pid: pid});
-                    playerView.on('edit',that.edited);
-                    playerView.on('remove',that.removed);
+                    that.listenTo(playerView,'edit',that.edited);
+                    that.listenTo(playerView,'remove',that.removed);
 
                     views.push(playerView);
                 });
@@ -388,8 +462,8 @@ define(['jquery',
 
                 _.each(game.oTeam,function(player, pid){
                     var playerView = new PlayerItem({model: player, pid: pid});
-                    playerView.on('edit',that.edited);
-                    playerView.on('remove',that.removed);
+                    that.listenTo(playerView,'edit',that.edited);
+                    that.listenTo(playerView,'remove',that.removed);
 
                     views.push(playerView);
                 });
@@ -471,9 +545,9 @@ define(['jquery',
 
                 this.template = _.template(InGameTemplate);
 
-                this.model.on('update',function(){
+                this.listenTo(this.model,'update',function(){
                     this.update();
-                },this);
+                });
             },
 
             events: {
@@ -537,12 +611,13 @@ define(['jquery',
 
                     this.$('#mid').append(playerView.render().el);
 
-                    playerView.$el.css({left: x, top: y + offset.top});
+                    playerView.$el.css({left: x, top: y});
 
                 //token é um shot, então só é preciso atualizar sua posição
                 }else{
+
                     var x = ui.position.left;
-                    var y = ui.position.top - offset.top;
+                    var y = ui.position.top;
 
                     var shot =  playerShots[sid];
                     shot.x = x;
@@ -561,7 +636,6 @@ define(['jquery',
             },
 
 
-
             update: function(){
 
 
@@ -576,7 +650,6 @@ define(['jquery',
                     var that = this;
 
                     var game = this.model.toJSON();
-                    var offset = this.$('#mid').offset();
 
                     var newMShots = [];
                     var newOShots = [];
@@ -591,8 +664,8 @@ define(['jquery',
                             var shot = player[shotView.options.sid];
                             if(shot){
                                 mShotsMap[shotView.options.pid + ':' + shotView.options.sid] = true;
-                                if(shotView.$el.css('left')!= shot.x || shotView.$el.css('top')!= shot.y + offset.top){
-                                    shotView.$el.animate({left: shot.x, top: shot.y + offset.top});
+                                if(shotView.$el.css('left')!= shot.x || shotView.$el.css('top')!= shot.y){
+                                    shotView.$el.animate({left: shot.x, top: shot.y});
                                 }
                                 newMShots.push(shotView);
                             }else{
@@ -618,7 +691,7 @@ define(['jquery',
 
                                 that.$('#mid').append(shotView.render().el);
 
-                                shotView.$el.css({left: shot.x, top: shot.y + offset.top});
+                                shotView.$el.css({left: shot.x, top: shot.y});
 
                                 shotView.$el.addClass('animated bounceIn');
                                 setTimeout(function(){
@@ -641,8 +714,8 @@ define(['jquery',
                             var shot = player[shotView.options.sid];
                             if(shot){
                                 oShotsMap[shotView.options.pid + ':' + shotView.options.sid] = true;
-                                if(shotView.$el.css('left')!= shot.x || shotView.$el.css('top')!= shot.y + offset.top){
-                                    shotView.$el.animate({left: shot.x, top: shot.y + offset.top});
+                                if(shotView.$el.css('left')!= shot.x || shotView.$el.css('top')!= shot.y){
+                                    shotView.$el.animate({left: shot.x, top: shot.y});
                                 }
                                 newOShots.push(shotView);
                             }else{
@@ -668,7 +741,7 @@ define(['jquery',
 
                                 that.$('#mid').append(shotView.render().el);
 
-                                shotView.$el.css({left: shot.x, top: shot.y + offset.top});
+                                shotView.$el.css({left: shot.x, top: shot.y});
 
                                 shotView.$el.addClass('animated bounceIn');
                                 setTimeout(function(){
@@ -743,47 +816,46 @@ define(['jquery',
 
             afterAdd: function(){
 
-            var that = this;
+                var that = this;
 
-            var game = this.model.toJSON();
-            var offset = this.$('#mid').offset();
+                var game = this.model.toJSON();
 
-            this.mShotsViews = [];
-            this.oShotsViews = [];
+                this.mShotsViews = [];
+                this.oShotsViews = [];
 
-            _.each(this.mViews,function(playerView,i){
+                _.each(this.mViews,function(playerView,i){
 
-                var shots = game.mShots[playerView.options.pid];
+                    var shots = game.mShots[playerView.options.pid];
 
-                _.each(shots,function(shot,sid){
+                    _.each(shots,function(shot,sid){
 
-                    var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: true, pos: i, drag: true});
-                    that.mShotsViews.push(tokenView);
+                        var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: true, pos: i, drag: true});
+                        that.mShotsViews.push(tokenView);
 
-                    that.$('#mid').append(tokenView.render().el);
+                        that.$('#mid').append(tokenView.render().el);
 
-                    tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
+                        tokenView.$el.css({left: shot.x, top: shot.y});
 
+                    });
                 });
-            });
 
-            _.each(this.oViews,function(playerView,i){
+                _.each(this.oViews,function(playerView,i){
 
-                var shots = game.oShots[playerView.options.pid];
+                    var shots = game.oShots[playerView.options.pid];
 
-                _.each(shots,function(shot,sid){
+                    _.each(shots,function(shot,sid){
 
-                    var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: that.oViews.length-i-1, drag: true});
-                    that.oShotsViews.push(tokenView);
+                        var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: that.oViews.length-i-1, drag: true});
+                        that.oShotsViews.push(tokenView);
 
-                    that.$('#mid').append(tokenView.render().el);
+                        that.$('#mid').append(tokenView.render().el);
 
-                    tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
+                        tokenView.$el.css({left: shot.x, top: shot.y});
 
+                    });
                 });
-            });
 
-        }
+            }
 
         });
 
@@ -900,7 +972,6 @@ define(['jquery',
                 var that = this;
 
                 var game = this.model.toJSON();
-                var offset = this.$('#mid').offset();
 
                 this.mViews = [];
                 this.oViews = [];
@@ -911,8 +982,8 @@ define(['jquery',
                 _.each(game.mTeam,function(player,key){
                     var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: true, canDisable: true, drag: false});
 
-                    playerView.on('disabled',that.disabledPlayer);
-                    playerView.on('enabled',that.enablePlayer);
+                    that.listenTo(playerView,'disabled',that.disabledPlayer);
+                    that.listenTo(playerView,'enabled',that.enablePlayer);
 
                     that.mViews.push(playerView);
                 });
@@ -932,7 +1003,7 @@ define(['jquery',
 
                         that.$('#mid').append(tokenView.render().el);
 
-                        tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
+                        tokenView.$el.css({left: shot.x, top: shot.y});
                         tokenView.showOnSide(game.opts.sides);
 
                     });
@@ -942,8 +1013,8 @@ define(['jquery',
                 _.each(game.oTeam,function(player,key){
                     var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: false, canDisable: true, drag: false});
 
-                    playerView.on('disabled',that.disabledPlayer);
-                    playerView.on('enabled',that.enablePlayer);
+                    that.listenTo(playerView,'disabled',that.disabledPlayer);
+                    that.listenTo(playerView,'enabled',that.enablePlayer);
 
                     that.oViews.push(playerView);
                 });
@@ -963,7 +1034,7 @@ define(['jquery',
 
                         that.$('#mid').append(tokenView.render().el);
 
-                        tokenView.$el.css({left: shot.x, top: shot.y + offset.top});
+                        tokenView.$el.css({left: shot.x, top: shot.y});
                         tokenView.showOnSide(game.opts.sides);
 
                     });
@@ -1003,7 +1074,9 @@ define(['jquery',
 
             },
 
-            toggle: function(){
+            toggle: function(evt){
+                evt.stopPropagation();
+
                 if(!this.shot && this.options.canDisable){
                     if(this.disabled){
                         this.$el.removeClass('disabled');
@@ -1024,20 +1097,18 @@ define(['jquery',
 
                 if(!this.shot) return;
 
-                var offset = $('#mid').offset();
-
                 if(side){
                     if(this.options.my){
                         if(this.shot.x > 460){
-                            this.$el[animate?"animate":"css"]({left: this.shot.x-2*(this.shot.x-460) +8, top: 518 - this.shot.y + offset.top -32},1000);
+                            this.$el[animate?"animate":"css"]({left: this.shot.x-2*(this.shot.x-460) +8, top: 518 - this.shot.y - 32},1000);
                         }
                     }else{
                         if(this.shot.x < 460){
-                            this.$el[animate?"animate":"css"]({left: 460 + (460-this.shot.x) + 8, top: 518 - this.shot.y + offset.top -32},1000);
+                            this.$el[animate?"animate":"css"]({left: 460 + (460-this.shot.x) + 8, top: 518 - this.shot.y - 32},1000);
                         }
                     }
                 }else{
-                    this.$el[animate?"animate":"css"]({left: this.shot.x, top: this.shot.y + offset.top},1000);
+                    this.$el[animate?"animate":"css"]({left: this.shot.x, top: this.shot.y},1000);
                 }
 
             },
@@ -1150,6 +1221,7 @@ define(['jquery',
 
 
         return {
+            UserView: UserView,
             GamesList: GamesList,
             GameDetails: GameDetails,
             PreGame: PreGame,

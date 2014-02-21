@@ -47,11 +47,7 @@ define([
 
     //pega a data atual (porém se for em dev pode retornar outra data, para testes)
     module.now = function(){
-        if(basketball.env_development){
-            return new Date(new Date(basketball.now).getFullYear(), new Date(basketball.now).getMonth(), new Date(basketball.now).getDate(), new Date().getHours(), new Date().getMinutes(), new Date().getSeconds(), new Date().getMilliseconds());
-        }else{
-            return new Date();
-        }
+        return new Date();
     }
 
     module.invalidField = function(el,msg,pos){

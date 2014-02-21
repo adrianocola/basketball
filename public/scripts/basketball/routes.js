@@ -111,6 +111,8 @@ define([
 
         var init = false;
 
+
+
         collection.fetch({local: basketball.offline?true:false, success: function(){
 
             if(init) return;

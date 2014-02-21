@@ -1,5 +1,6 @@
 CACHE MANIFEST
-# rev 316
+# rev 379
+
 
 /favicon.ico
 /images/court.jpg
@@ -23,6 +24,7 @@ CACHE MANIFEST
 /stylesheets/basketball.css
 /stylesheets/jquery-ui.css
 
+/scripts/templates/user.html
 /scripts/templates/error.html
 /scripts/templates/games_list.html
 /scripts/templates/games_list_item.html
@@ -57,4 +59,5 @@ socket.io/
 socket.io/1/
 api/games/
 api/
+logout
 
