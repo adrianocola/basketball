@@ -136,6 +136,8 @@ define(['jquery',
                     that.$('#listContainer').append(new GamesListItem({model: game, collection: that.collection}).render().el);
                 });
 
+                this.$("#contact_email").attr("href","mailto:" + "adrianocola" + "@" + "gmail" + ".com");
+
                 return this;
             }
         });

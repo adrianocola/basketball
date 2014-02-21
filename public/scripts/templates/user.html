@@ -1,6 +1,6 @@
 <% if(user.online){ %>
-<span>Olá, <%= user.email %>! <a class="logout" href="#">SAIR</a></span>
+<span>Olá, <b><%= user.email %></b>! <a class="logout" href="#">SAIR</a></span>
 <% }else{ %>
-<span>Executando em modo <b>offline</b> para o usuário <%= user.email %>! <a class="logout" href="#">SAIR</a></span>
+<span>Executando em modo <b>offline</b> para o usuário <b><%= user.email %></b>! <a class="logout" href="#">SAIR</a></span>
 <% } %>
 

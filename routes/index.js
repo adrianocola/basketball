@@ -92,21 +92,28 @@ app.delete('/api/games/:id', app.utils.verifyAuthorization, function(req, res, n
 
 app.get('/login', function(req, res, next){
 
-    res.render('login', {env: app.env });
+    if(req.session && req.session.userId){
+        res.redirect('/');
+    }else{
+        res.render('login', {env: app.env });
+    }
 });
 
 app.get('/signup', function(req, res, next){
 
-    res.render('signup', {env: app.env });
+    if(req.session && req.session.userId){
+        res.redirect('/');
+    }else{
+        res.render('signup', {env: app.env });
+    }
+
 });
 
 
 app.get('*', function(req, res, next){
 
-
-
     if(req.session && req.session.userId){
-        res.render('main', {session: req.session, env: app.env });
+        res.redirect('/');
     }else{
         res.redirect('/login');
     }

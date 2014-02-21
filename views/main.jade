@@ -65,7 +65,10 @@ html(manifest="/cache.manifest")
                         appCache.swapCache();
                         if (confirm('Uma nova versão do site está disponível. Deseja carregá-la?')) {
                             window.location.reload();
+                        }else{
+                            $('#status').html('<b>NOVA VERSÃO!</b> Atualize a página para usar a última versão!');
                         }
+
                     }
                 }, false);
 
@@ -126,10 +129,12 @@ html(manifest="/cache.manifest")
             //faz load do aplicativo Customer (para funcionar direito só pode ter o load da Store aqui)
             require(['Basketball']);
 
-    body(style="display:none;")
-        div#logged
-        div#main
+    body
+        div#header
+            div#updates
+                span#status
+            div#logged
+        div#main(style="display:none;")
             div#top
             div#mid
             div#bot
-        div#status
