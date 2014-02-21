@@ -14,6 +14,7 @@ require(['jquery','underscore','Routes', 'Startup', 'Views'], function($,_,Route
 //            Routes.initialize();
 //        }
 
+        $('body').css('display','block');
         $('#main').css('display','block');
 
         if(!window.localStorage.getItem('user')){
