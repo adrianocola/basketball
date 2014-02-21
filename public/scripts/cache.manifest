@@ -45,7 +45,6 @@ CACHE MANIFEST
 /scripts/vendor/backbone.offline.js
 /scripts/vendor/moment.js
 
-
 /scripts/basketball/basketball.js
 /scripts/basketball/routes.js
 /scripts/basketball/views.js
