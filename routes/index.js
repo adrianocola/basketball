@@ -109,6 +109,17 @@ app.get('/signup', function(req, res, next){
 
 });
 
+app.get('/app', function(req, res, next){
+
+    if(req.session && req.session.userId){
+        res.render('main');
+    }else{
+        res.redirect('/login');
+    }
+
+});
+
+
 app.get('*', function(req, res, next){
 
     if(req.session && req.session.userId){
