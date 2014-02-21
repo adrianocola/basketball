@@ -19,8 +19,6 @@ define([
 
         if (jqxhr.status == 401) {
             new Views.ErrorView({msg: "Sessão Expirada!", action: "login"}).render();
-        } else if (jqxhr.status === 0) {
-            new Views.ErrorView({msg: "Não foi possível estabelecer uma conexão com o servidor. Verifique sua conexão de internet"}).render();
         } else if (jqxhr.status == 404) {
             new Views.ErrorView({msg: "Página não encontrada [Erro 404]"}).render();
         } else if (jqxhr.status == 500) {

@@ -46,8 +46,7 @@ em
     overflow: hidden
 
 #main #top
-    margin: 20px 0
-    height: 40px
+    margin: 20px 0 5px 0
 
 #main #mid
     height: 518px
@@ -55,7 +54,7 @@ em
     position: relative
 
 #main #bot
-    margin: 20px 0
+    margin: 5px 0 20px 0
     height: 40px
 
 //************************
@@ -241,8 +240,7 @@ em
 
 .token
     display: block
-    border: 1px solid black
-    border-radius: 15px
+    border: 1px solid rgb(50,50,50)
     width: 30px
     height: 30px
     text-align: center
@@ -253,10 +251,17 @@ em
     background-color: white
     user-select: none
     box-shadow: 2px 2px 3px rgba(0,0,0,0.5)
+    text-shadow: 0px 0px 3px rgba(255,255,255,1)
+
+.token.token_circle
+  border-radius: 50px
+
+.token.token_square
+    border-radius: 0px
 
 .token.opp
-    background-color: #ccc
-    border: 1px solid red
+    background-color: #ddd
+    border-color: red
 
 #mid .token:hover:not(.ui-draggable-dragging)
     transition: all .1s;
@@ -331,6 +336,11 @@ em
 #ingame .team
     display: inline-block
 
+#ingame .team.mTeam
+    margin-top: -20px
+
+#ingame .team .team_play
+    margin: 5px 0
 
 #ingame .team .token
     position: relative

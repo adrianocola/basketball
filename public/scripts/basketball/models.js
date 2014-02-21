@@ -111,7 +111,7 @@ define(['jquery',
                 //id: {num: 1, name: 'teste', pos: 1}
             },
             mShots: {
-                //'player_id': { date: {date: now(), x: 123, y: 123, type: '0'}  }
+                //'player_id': { date: {date: now(), x: 123, y: 123, play: 'circle'}  }
             },
             oShots: {
 

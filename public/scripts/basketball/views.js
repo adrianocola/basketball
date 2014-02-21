@@ -587,6 +587,13 @@ define(['jquery',
 
                 var my = ui.draggable.hasClass('my');
 
+                var play = 'circle';
+                if(ui.draggable.hasClass('token_square')){
+                    play = 'square';
+                }else if(ui.draggable.hasClass('token_circle')){
+                    play = 'circle';
+                }
+
                 var player = my?this.model.get('mTeam')[pid]:this.model.get('oTeam')[pid];
 
                 var shots = my?this.model.get('mShots'):this.model.get('oShots');
@@ -604,7 +611,7 @@ define(['jquery',
                     var x = ui.offset.left - offset.left;
                     var y = ui.offset.top - offset.top;
 
-                    var shot = {date: Utils.now(), x: x, y: y};
+                    var shot = {date: Utils.now(), x: x, y: y, play: play};
 
                     var sid = Utils.uniqueId();
 
@@ -679,7 +686,7 @@ define(['jquery',
 
                     });
 
-                    _.each(this.mViews,function(playerView,i){
+                    _.each(this.mViewsCircle,function(playerView,i){
 
                         var pid = playerView.options.pid;
                         var shots = game.mShots[pid];
@@ -729,7 +736,7 @@ define(['jquery',
 
                     });
 
-                    _.each(this.oViews,function(playerView,i){
+                    _.each(this.oViewsCircle,function(playerView,i){
 
                         var pid = playerView.options.pid;
                         var shots = game.oShots[pid];
@@ -784,34 +791,62 @@ define(['jquery',
 
                 var game = this.model.toJSON();
 
-                this.mViews = [];
-                this.oViews = [];
+                this.mViewsCircle = [];
+                this.mViewsSquare = [];
+                this.oViewsCircle = [];
+                this.oViewsSquare = [];
 
-                this.$('.team.mTeam').html('');
-                this.$('.team.oTeam').html('');
+                this.$('.team.mTeam .circle').html('');
+                this.$('.team.mTeam .square').html('');
+                this.$('.team.oTeam .circle').html('');
+                this.$('.team.oTeam .square').html('');
+
 
                 _.each(game.mTeam,function(player,key){
-                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: true, drag: true});
-                    that.mViews.push(playerView);
+                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'circle', my: true, drag: true});
+                    that.mViewsCircle.push(playerView);
+                });
+
+                _.each(game.mTeam,function(player,key){
+                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'square', my: true, drag: true});
+                    that.mViewsSquare.push(playerView);
                 });
 
                 //mostra a lista de jogadores de forma ordenada
-                this.mViews = this.mViews.sort(function(a, b) {return a.player.num - b.player.num});
-                _.each(this.mViews,function(playerView,i){
-                    that.$('.mTeam').append(playerView.render().el);
+                this.mViewsCircle = this.mViewsCircle.sort(function(a, b) {return a.player.num - b.player.num});
+                _.each(this.mViewsCircle,function(playerView,i){
+                    that.$('.team.mTeam .circle').append(playerView.render().el);
+                    playerView.paint(i);
+                });
+
+                this.mViewsSquare = this.mViewsSquare.sort(function(a, b) {return a.player.num - b.player.num});
+                _.each(this.mViewsSquare,function(playerView,i){
+                    that.$('.team.mTeam .square').append(playerView.render().el);
                     playerView.paint(i);
                 });
 
                 _.each(game.oTeam,function(player,key){
-                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, my: false, drag: true});
-                    that.oViews.push(playerView);
+                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'circle', my: false, drag: true});
+                    that.oViewsCircle.push(playerView);
+                });
+
+                _.each(game.oTeam,function(player,key){
+                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'square', my: false, drag: true});
+                    that.oViewsSquare.push(playerView);
                 });
 
                 //mostra a lista de jogadores de forma ordenada
-                this.oViews = this.oViews.sort(function(a, b) {return b.player.num - a.player.num});
-                _.each(this.oViews,function(playerView,i){
-                    that.$('.oTeam').append(playerView.render().el);
-                    playerView.paint(that.oViews.length-i-1);
+                this.oViewsCircle = this.oViewsCircle.sort(function(a, b) {return b.player.num - a.player.num});
+                _.each(this.oViewsCircle,function(playerView,i){
+                    that.$('.team.oTeam .circle').append(playerView.render().el);
+                    playerView.paint(that.oViewsCircle.length-i-1);
+                });
+
+                //mostra a lista de jogadores de forma ordenada
+                this.oViewsSquare = this.oViewsSquare.sort(function(a, b) {return b.player.num - a.player.num});
+                _.each(this.oViewsSquare,function(playerView,i){
+                    that.$('.team.oTeam .square').append(playerView.render().el);
+                    playerView.paint(that.oViewsSquare.length-i-1);
                 });
 
             },
@@ -825,7 +860,7 @@ define(['jquery',
                 this.mShotsViews = [];
                 this.oShotsViews = [];
 
-                _.each(this.mViews,function(playerView,i){
+                _.each(this.mViewsCircle,function(playerView,i){
 
                     var shots = game.mShots[playerView.options.pid];
 
@@ -841,13 +876,13 @@ define(['jquery',
                     });
                 });
 
-                _.each(this.oViews,function(playerView,i){
+                _.each(this.oViewsCircle,function(playerView,i){
 
                     var shots = game.oShots[playerView.options.pid];
 
                     _.each(shots,function(shot,sid){
 
-                        var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: that.oViews.length-i-1, drag: true});
+                        var tokenView = new PlayerToken({model: that.model, player: playerView.player, pid: playerView.options.pid, shot: shot, sid: sid, my: false, pos: that.oViewsCircle.length-i-1, drag: true});
                         that.oShotsViews.push(tokenView);
 
                         that.$('#mid').append(tokenView.render().el);
@@ -1157,6 +1192,24 @@ define(['jquery',
                     this.$el.addClass('my');
                 }else{
                     this.$el.addClass('opp');
+                }
+
+                if(!this.shot){
+                    if(this.options.play==="square"){
+                        this.$el.addClass('token_square');
+                    }else if(this.options.play==="circle"){
+                        this.$el.addClass('token_circle');
+                    }else{
+                        this.$el.addClass('token_circle');
+                    }
+                }else{
+                    if(this.shot.play==="square"){
+                        this.$el.addClass('token_square');
+                    }else if(this.shot.play==="circle"){
+                        this.$el.addClass('token_circle');
+                    }else{
+                        this.$el.addClass('token_circle');
+                    }
                 }
 
                 if(this.options.pid){
