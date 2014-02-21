@@ -355,8 +355,10 @@ em{font-weight:bold;text-decoration:underline}
 #gamelist #top .title{display:inline-block;font-size:32px;vertical-align:middle}
 #gamelist #top .addGame{vertical-align:middle}
 #gamelist #listContainer{width:auto;height:100%;background-color:rgba(255,255,255,0.8);padding:20px;overflow:auto;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+#gamelist #listFilter{width:200px}
+#gamelist #list{list-style-type:none}
 #gamelist .gameitem{list-style:none;margin-top:3px;padding:3px 5px;width:auto;line-height:24px}
-#gamelist .gameitem .del{display:inline-block}
+#gamelist .gameitem .del{display:inline-block;vertical-align:middle}
 #gamelist .gameitem .go{display:inline-block;height:28px;line-height:16px;font-weight:bold;padding:1px 3px}
 #gamelist .gameitem .details{display:inline-block;border:1px solid #000;background-color:rgba(0,0,0,0.5);-webkit-border-radius:6px;border-radius:6px;padding-right:10px}
 #gamelist .gameitem .date{display:inline-block;border-right:1px solid #000;-webkit-border-radius:6px;border-radius:6px;background-color:#fff;padding:1px 10px}

@@ -110,19 +110,42 @@ define(['jquery',
                 _.bindAll(this);
 
                 this.template = _.template(GameListTemplate);
+                this.gameViews = [];
 
                 this.listenTo(this.collection,'add',function(model, collection){
-                    this.$('#listContainer').prepend(new GamesListItem({model: model, collection: collection}).render().el);
+                    this.$('#list').prepend(new GamesListItem({model: model, collection: collection}).render().el);
                 });
 
             },
 
             events: {
-                'click .addGame': 'addGame'
+                'click .addGame': 'addGame',
+                'keyup #listFilter': 'filterList'
             },
 
             addGame: function(){
                 Backbone.history.navigate('/games/new_game', true);
+            },
+
+            filterList: function(evt){
+                var that = this;
+
+                var value = this.$("#listFilter").val().toLowerCase();
+
+                _.each(this.gameViews,function(gameView){
+                    gameView.remove();
+                });
+
+                this.gameViews = [];
+
+                this.collection.each(function(game){
+                    if(game.get("name").toLowerCase().indexOf(value)!=-1){
+                        var gameListItemView = new GamesListItem({model: game, collection: that.collection});
+                        that.$('#list').append(gameListItemView.render().el);
+                        that.gameViews.push(gameListItemView);
+                    }
+                });
+
             },
 
             render: function(){
@@ -133,7 +156,9 @@ define(['jquery',
 
                 this.collection.sort();
                 this.collection.each(function(game){
-                    that.$('#listContainer').append(new GamesListItem({model: game, collection: that.collection}).render().el);
+                    var gameListItemView = new GamesListItem({model: game, collection: that.collection});
+                    that.$('#list').append(gameListItemView.render().el);
+                    that.gameViews.push(gameListItemView);
                 });
 
                 this.$("#contact_email").attr("href","mailto:" + "adrianocola" + "@" + "gmail" + ".com");
@@ -152,8 +177,6 @@ define(['jquery',
                 _.bindAll(this);
 
                 this.template = _.template(GamesListItemTemplate);
-
-
 
                 this.listenTo(this.model,'update',function(){
                     this.render();
@@ -211,10 +234,13 @@ define(['jquery',
                         mShots: {},
                         oShots: {},
                         opts: {}
-
+                    });
+                    this.listenTo(this.model,'sync',function(){
+                        that.stopListening(that.model);
+                        that.render();
                     });
                 }else{
-                    //teta buscar primeiro pelo ID externo, do DB
+                    //tenta buscar primeiro pelo ID externo, do DB
                     this.model = this.collection.getBySid(this.gameId);
                     //se não achar busca pelo ID interno
                     if(!this.model){
