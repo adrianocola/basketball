@@ -109,10 +109,10 @@ app.get('/signup', function(req, res, next){
 
 });
 
-app.get('/app', function(req, res, next){
+app.get('/app.html', function(req, res, next){
 
     if(req.session && req.session.userId){
-        res.render('main');
+        res.render('main', {env: app.env });
     }else{
         res.redirect('/login');
     }
@@ -123,7 +123,7 @@ app.get('/app', function(req, res, next){
 app.get('*', function(req, res, next){
 
     if(req.session && req.session.userId){
-        res.render('main');
+        res.render('main', {env: app.env });
     }else{
         res.redirect('/login');
     }
