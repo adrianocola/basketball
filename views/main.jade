@@ -40,6 +40,10 @@ html
             // Check if a new cache is available on page load.
             window.addEventListener('load', function(e) {
 
+                if(!basketball.online){
+                    return;
+                }
+
                 var appCache = window.applicationCache;
 
                 // Checking for an update. Always the first event fired in the sequence.
