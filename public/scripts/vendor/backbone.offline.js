@@ -130,7 +130,6 @@
                 if (options == null) {
                     options = {};
                 }
-
                 if (!options.local) {
                     if (this.isEmpty()) {
                         this.sync.full(options);
@@ -292,9 +291,6 @@
                         }
                         if (!options.silent) {
                             _this.collection.items.trigger('reset');
-                        }
-                        if (options.success) {
-                            return options.success(model, response, opts);
                         }
                     }
                 }));

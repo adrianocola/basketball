@@ -49,6 +49,10 @@ html
                     $('#status').html('Buscando Atualizações...');
                 }, false);
 
+                appCache.addEventListener('error', function(e){
+                    $('#status').hide();
+                }, false);
+
                 // Fired after the first download of the manifest.
                 appCache.addEventListener('noupdate', function(){
                     $('#status').html('Aplicativo já está na última versão!');

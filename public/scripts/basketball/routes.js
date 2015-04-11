@@ -111,40 +111,31 @@ define([
 
         var collection = new Models.GameCollection();
 
-
-
         var init = false;
 
-        collection.fetch({local: basketball.offline, success: function(col){
+        window.collection = collection;
+
+        collection.fetch({local: basketball.offline, success: function(col,resp){
 
             if(init) return;
 
             init = true;
 
-            if(basketball.online){
-                var start = false;
-
-                collection.once('pull',function(){
-                    if(start) return;
-                    start = true;
-                    var app_router = new AppRouter(collection);
-
-                    //inicializa controle de histórico (verifica se pode usar push state)
-                    Utils.startHistory(app_router);
-                });
-                collection.once('reset',function(){
-                    if(start) return;
-                    start = true;
-                    var app_router = new AppRouter(collection);
-
-                    //inicializa controle de histórico (verifica se pode usar push state)
-                    Utils.startHistory(app_router);
-                });
-            }else{
+            var initialize = function(){
+                if(start) return;
+                start = true;
                 var app_router = new AppRouter(collection);
 
                 //inicializa controle de histórico (verifica se pode usar push state)
                 Utils.startHistory(app_router);
+            }
+
+            if(basketball.online){
+                var start = false;
+                collection.once('pull',initialize);
+                collection.once('reset',initialize);
+            }else{
+                initialize();
             }
 
         }});

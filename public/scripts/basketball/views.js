@@ -93,7 +93,7 @@ define(['jquery',
                     window.location = "/logout";
                 }else{
                     if (confirm('Se você sair enquanto estiver no modo offline, todas as mudanças feitas serão perdidas e você só poderá usar o sistema novamente quando estiver conectado à internet! Tem certeza que deseja sair?')) {
-                        localStorage.clear();
+                        //localStorage.clear();
                         window.location = "/";
                     }
                 }
@@ -104,7 +104,7 @@ define(['jquery',
 
                 if(!this.model) return this;
 
-                this.$el.html(this.template({user: this.model.toJSON()}));
+                this.$el.html(this.template({user: this.model.toJSON(), basketball: basketball}));
 
                 return this;
             }
@@ -373,12 +373,11 @@ define(['jquery',
 
             events: {
                 'click .del': 'delete',
-                'dblclick': 'details',
                 'click .go': 'details'
             },
 
             details: function(){
-                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id), {trigger:true, replace: false});
+                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + "/pre", {trigger:true, replace: false});
             },
 
             delete: function(){
@@ -435,8 +434,6 @@ define(['jquery',
             },
 
             render: function(where){
-
-                console.log("RENDER DETAILS");
 
                 //se ainda não foi salvo no server não exibe o jogo ainda
                 if(basketball.online && this.model.get('sid') === "new"){

@@ -1,11 +1,12 @@
 CACHE MANIFEST
-# rev 509
+# rev 515
 
 /favicon.ico
 /images/court.jpg
 /images/icon.png
 /images/splash.png
 /images/select.png
+/images/config.png
 /images/jquery-ui/ui-bg_flat_0_aaaaaa_40x100.png
 /images/jquery-ui/ui-bg_flat_75_ffffff_40x100.png
 /images/jquery-ui/ui-bg_glass_55_fbf9ee_1x400.png
@@ -24,6 +25,7 @@ CACHE MANIFEST
 /stylesheets/jquery-ui.css
 
 /scripts/templates/user.html
+/scripts/templates/config.html
 /scripts/templates/error.html
 /scripts/templates/games_list.html
 /scripts/templates/games_list_item.html
@@ -43,6 +45,8 @@ CACHE MANIFEST
 /scripts/vendor/backbone.js
 /scripts/vendor/backbone.offline.js
 /scripts/vendor/moment.js
+/scripts/vendor/velocity.js
+/scripts/vendor/md5.js
 
 /scripts/basketball/basketball.js
 /scripts/basketball/routes.js

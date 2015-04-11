@@ -19,6 +19,8 @@ define(['jquery',
 
             _.bindAll(this);
 
+            //this.storage = new Offline.Storage('user', this, {autoPush: basketball.online?true:false});
+
         },
 
         defaults: {
