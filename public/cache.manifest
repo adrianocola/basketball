@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# rev 508
+# rev 509
 
 /favicon.ico
 /images/court.jpg
@@ -55,6 +55,7 @@ NETWORK:
 online.js
 socket.io/
 socket.io/1/
+api/user/data
 api/games/
 api/
 logout

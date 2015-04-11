@@ -20,9 +20,9 @@ define([
         if (jqxhr.status == 401) {
             new Views.ErrorView({msg: "Sessão Expirada!", action: "login"}).render();
         } else if (jqxhr.status == 404) {
-            new Views.ErrorView({msg: "Página não encontrada [Erro 404]"}).render();
+            new Views.ErrorView({msg: jqxhr.responseText || "Página não encontrada [Erro 404]", action: "refresh"}).render();
         } else if (jqxhr.status == 500) {
-            new Views.ErrorView({msg: "Erro no servidor [Erro 500]"}).render();
+            new Views.ErrorView({msg: jqxhr.responseText || "Erro no servidor [Erro 500]", action: "refresh"}).render();
         } else if (exception === 'parsererror') {
             new Views.ErrorView({msg: "Erro de parse do JSON"}).render();
         } else if (exception === 'timeout') {

@@ -30,11 +30,15 @@ define([
         },
 
         routes: {
+            'config': 'showConfig',
             'games/:game': 'showGame',
             'games/:game/pre': 'showPreGame',
             'games/:game/in': 'showInGame',
             'games/:game/pos': 'showPosGame',
             '*actions': 'defaultAction'
+        },
+        showConfig: function(gameId){
+            this.showView(this.html_main,new Views.ConfigView({gameId: gameId, collection: this.collection}));
         },
         showGame: function(gameId){
             this.showView(this.html_main,new Views.GameDetails({gameId: gameId, collection: this.collection}));

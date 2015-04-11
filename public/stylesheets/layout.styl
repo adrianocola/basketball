@@ -102,6 +102,19 @@ em
 #gamelist #top .addGame
     vertical-align: middle
 
+#gamelist #top .config_widget
+    float: right
+    cursor: pointer
+
+#gamelist #top .config
+    width: 32px
+    height: 32px
+    vertical-align: middle
+    opacity: 0.5
+
+#gamelist #top .config_widget:hover .config
+    opacity: 1
+
 #gamelist #listContainer
     width: auto
     height: 100%
@@ -159,6 +172,75 @@ em
     font-weight: bold
     margin-left: 5px
     color: white
+
+
+
+//************************
+//******** CONFIG ********
+//************************
+
+#config #top .title
+    display: inline-block
+    font-size: 28px
+
+#config #mid .configPanel
+    width: 100%
+    height: 100%
+    background-color: rgba(255,255,255,0.8)
+    text-align: center
+
+#config #mid .configPanel h1
+    text-align: center
+
+#config #mid .containerLeft, #config #mid .containerRight
+    display: inline-block
+    height: 500px
+    width: 45%
+    margin: 0 23px
+    vertical-align: top
+    box-sizing:border-box
+    margin-top: 10px
+    overflow: auto
+
+#config .playerTable
+    margin: 5px 0
+
+#config .playerTable tr
+    height: 24px
+
+#config .playerTable .action
+    width: 20px
+
+#config .playerTable tr td.action
+    visibility: visible
+
+#config .playerTable td
+    padding: 1 5px
+
+#config .playerTable th.number
+    width: 60px
+
+#config .playerTable .number select
+    width: 50px
+
+#config .playerTable th.name
+    width: 220px
+
+#config .playerTable .name input
+    width: 180px
+
+#config .playerTable th.position
+    width: 80px
+
+#config .playerTable .position select
+    width: 80px
+
+#config .change_passwod_item
+    margin-top: 5px
+
+#config #change_password_msg
+    margin-top 10px
+    color: red
 
 //************************
 //***** GAME DETAIL ******

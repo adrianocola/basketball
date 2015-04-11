@@ -21,6 +21,10 @@ define(['jquery',
 
         },
 
+        defaults: {
+            team: {}
+        },
+
         logout: function(options){
             $.ajax('/api/user/logout',options);
         },

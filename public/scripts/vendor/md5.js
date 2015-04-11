@@ -380,6 +380,12 @@
         return (num << cnt) | (num >>> (32 - cnt));
     }
 
+    if (typeof define === 'function' && define.amd) {
+        define(function() {
+            return exports;
+        });
+    }
+
 })(typeof exports === 'undefined'? this['md5']={}: exports);
 
 

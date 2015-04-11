@@ -20,7 +20,7 @@ var GameSchema = new Schema({
 
 
 var UserSchema = new Schema({
-    email: {type: String, lowercase: true, index: { unique: true, sparse: true }},
+    email: {type: String, lowercase: true, index: { unique: true}},
     password: {type: String, required: true},
     last_login: Date,
     team: {}

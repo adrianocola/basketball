@@ -102,8 +102,31 @@ app.get("/api/user/data", app.utils.verifyAuthorization, function(req, res, next
                 return;
             }
 
+            delete user._doc.password;
+
+            console.log(user);
+
             res.json(user);
         });
+
+});
+
+
+app.put("/api/user/data", app.utils.verifyAuthorization, function(req, res, next){
+
+    delete req.body._id;
+    delete req.body.email;
+
+    app.models.User.findOneAndUpdate({_id: req.session.userId},{$set: req.body},{new: true},function(err,user) {
+
+        if (err) {
+            next(new app.errors.UnexpectedError(err));
+            return;
+        }
+
+        res.json(user);
+
+    });
 
 });
 
@@ -143,13 +166,18 @@ app.get('/api/user/login', function(req,res,next){
 
             user.last_login = new Date();
 
-            user.save(function(err){});
+            user.save(function(err){
 
-            req.session.userId = user._id;
-            req.session.userEmail = user.email;
+                req.session.userId = user._id;
+                req.session.userEmail = user.email;
+
+                delete user._doc.password;
+
+                res.json(user);
+
+            });
 
 
-            res.json(user);
 
 
         });
@@ -198,10 +226,57 @@ app.post("/api/user/signup", function(req, res, next){
 
         console.log('Criado user ' + user._id + ' com e-mail: ' + user.email);
 
+        delete user._doc.password;
+
         res.json(user);
 
     });
 
+
+});
+
+app.put("/api/user/change_password", app.utils.verifyAuthorization, function(req, res, next){
+
+    //validate nonce
+    validateNonce(req.body.nonce, next, function(valid){
+
+        if(!valid){
+            clearAuthorization(req,res);
+            res.send(500,"Nonce inválido");
+            return;
+        }
+
+        app.models.User.findOne({_id: req.session.userId}, function(err,user){
+
+
+            if(err){
+                res.send(500,"Não foi possível alterar senha");
+                return;
+            }
+
+            if(!user || req.body.old != app.md5.hex_md5(user.password + req.body.nonce)){
+
+                res.send(500,"Senha antiga inválida");
+                return;
+
+            }
+
+            user.password = req.body.new;
+
+            user.save(function(err){
+
+                delete user._doc.password;
+
+                res.json(user);
+
+            });
+
+
+
+
+        });
+
+    });
 
 });
 

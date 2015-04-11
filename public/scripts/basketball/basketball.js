@@ -25,9 +25,10 @@ require(['jquery','underscore','Routes', 'Startup', 'Views'], function($,_,Route
             }
         }else{
 
+            $("#logged").html(new Views.UserView().render().el);
+
             Routes.initialize();
 
-            $("#logged").html(new Views.UserView().render().el);
 
         }
 

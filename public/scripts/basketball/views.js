@@ -2,10 +2,12 @@
 define(['jquery',
     'underscore',
     'backbone',
+    'md5',
     'Models',
     'moment',
     'Utils',
     'text!templates/user.html',
+    'text!templates/config.html',
     'text!templates/games_list.html',
     'text!templates/games_list_item.html',
     'text!templates/pre_game.html',
@@ -19,10 +21,12 @@ define(['jquery',
     function($,
              _,
              Backbone,
+             md5,
              Models,
              moment,
              Utils,
              UserTemplate,
+             ConfigTemplate,
              GameListTemplate,
              GamesListItemTemplate,
              PreGameTemplate,
@@ -57,16 +61,20 @@ define(['jquery',
                 if(basketball.online){
                     user.getUser({success: function(){
 
-                        window.localStorage.setItem("user",user.get("email"));
+                        window.localStorage.setItem("user",JSON.stringify(user.toJSON()));
 
                         that.model = user;
+                        basketball.userModel = user;
+
                         that.render();
                     }});
                 }else{
 
-                    user.set("email",window.localStorage.getItem("user"));
+                    user.set(JSON.parse(window.localStorage.getItem("user")));
 
                     this.model = user;
+                    basketball.userModel = user;
+
                     this.render();
                 }
 
@@ -101,6 +109,173 @@ define(['jquery',
 
         });
 
+        var ConfigView = Backbone.View.extend({
+
+            id: 'config',
+
+            initialize: function(){
+
+                var that = this;
+
+                _.bindAll(this);
+
+                this.template = _.template(ConfigTemplate);
+
+                this.model = basketball.userModel;
+
+            },
+
+            events:{
+                'click .back': 'back',
+                'click .add': 'addPlayer',
+                'click #change_password': 'changePassword'
+            },
+
+            back: function(){
+                Backbone.history.navigate('/', {trigger:true, replace: false});
+            },
+
+            addPlayer: function(evt){
+                var element = this.$(evt.currentTarget);
+
+                this.addUtil();
+            },
+
+            changePassword: function(){
+
+                var that = this;
+
+                var old = this.$("#change_password_old").val();
+                var new_pwd = this.$("#change_password_new").val();
+                var repeat = this.$("#change_password_repeat").val();
+
+                that.$("#change_password_msg").show();
+                if(!old){
+                    return this.$("#change_password_msg").html("Preencha a senha antiga!");
+                }
+
+                if(!new_pwd){
+                    return this.$("#change_password_msg").html("Preencha a nova senha!");
+                }
+
+                if(!repeat){
+                    return this.$("#change_password_msg").html("Repita a nova senha!");
+                }
+
+                if(new_pwd != repeat){
+                    return this.$("#change_password_msg").html("Nova senha não foi repetida corretamente!");
+                }
+
+                $.ajax({
+                    cache: false,
+                    url: "/api/nonce"
+                }).success(function( nonce ) {
+
+                    var secure_old = md5.hex_md5(md5.hex_md5(that.model.get("email") + $.trim($("#salt").html() + old)) + nonce);
+                    var secure_new = md5.hex_md5(that.model.get("email") + $.trim($("#salt").html() + new_pwd));
+
+                    $.ajax({
+                        cache: false,
+                        url: "/api/user/change_password",
+                        method: "PUT",
+                        data: {nonce: nonce, old: secure_old, new: secure_new}
+                    }).success(function( ) {
+
+                        return that.$("#change_password_msg").html("Senha alterada com sucesso!");
+
+                    });
+
+                });
+
+
+
+
+            },
+
+            edited: function(playerView){
+
+                var teamStr = 'team';
+
+                var players = this.model.get(teamStr);
+
+                if(playerView.pid){
+                    players[playerView.pid] = playerView.model;
+                }else{
+                    playerView.pid = Utils.uniqueId();
+                    players[playerView.pid] = playerView.model;
+                }
+
+
+                this.model.set(teamStr,players);
+                this.model.save();
+
+                window.localStorage.setItem("user",JSON.stringify(this.model.toJSON()));
+
+            },
+
+            removed: function(playerView){
+
+                var that = this;
+
+                var teamStr = 'team';
+
+                var players = this.model.get(teamStr);
+
+                delete players[playerView.pid];
+
+                that.model.set(teamStr,players);
+
+                that.model.save();
+
+                window.localStorage.setItem("user",JSON.stringify(this.model.toJSON()));
+
+                playerView.remove();
+
+            },
+
+            addUtil: function(){
+
+                var playerView = new PlayerItem({model: {num: -1, name: '', position: 0}, pid: Utils.uniqueId()});
+                this.listenTo(playerView,'edit',this.edited);
+                this.listenTo(playerView,'remove',this.removed);
+                this.$('.containerLeft .playerTable tbody').append(playerView.render().el);
+
+            },
+
+            render: function(){
+
+                if(!this.model) return this;
+
+                var that = this;
+
+                this.$el.html(this.template({user: this.model.toJSON()}));
+
+                var views = [];
+
+                var team = this.model.get("team");
+
+                _.each(team || {},function(player, pid){
+                    var playerView = new PlayerItem({model: player, pid: pid});
+                    that.listenTo(playerView,'edit',that.edited);
+                    that.listenTo(playerView,'remove',that.removed);
+
+                    views.push(playerView);
+                });
+
+                views = views.sort(function(a, b) {return a.model.num - b.model.num});
+                _.each(views, function(playerView){
+                    that.$('.containerLeft .playerTable tbody').append(playerView.render().el);
+                });
+
+                for(var i=_.size(team);i<5;i++){
+                    that.addUtil(true);
+                };
+
+                return this;
+            }
+
+        });
+
         var GamesList = Backbone.View.extend({
 
             id: 'gamelist',
@@ -119,8 +294,13 @@ define(['jquery',
             },
 
             events: {
+                'click .config_widget': 'config',
                 'click .addGame': 'addGame',
                 'keyup #listFilter': 'filterList'
+            },
+
+            config: function(){
+                Backbone.history.navigate('/config', {trigger:true, replace: false});
             },
 
             addGame: function(){
@@ -229,7 +409,7 @@ define(['jquery',
                         name: "Novo Jogo",
                         date: Utils.now(),
                         updated_at: null,
-                        mTeam:{},
+                        mTeam: basketball.userModel.get("team"),
                         oTeam: {},
                         mShots: {},
                         oShots: {},
@@ -1302,6 +1482,7 @@ define(['jquery',
 
         return {
             UserView: UserView,
+            ConfigView: ConfigView,
             GamesList: GamesList,
             GameDetails: GameDetails,
             PreGame: PreGame,
