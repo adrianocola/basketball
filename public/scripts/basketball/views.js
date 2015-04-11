@@ -124,7 +124,7 @@ define(['jquery',
             },
 
             addGame: function(){
-                Backbone.history.navigate('/games/new_game', true);
+                Backbone.history.navigate('/games/new_game', {trigger:true, replace: false});
             },
 
             filterList: function(evt){
@@ -196,7 +196,7 @@ define(['jquery',
             },
 
             details: function(){
-                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id), true);
+                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id), {trigger:true, replace: false});
             },
 
             delete: function(){
@@ -319,7 +319,7 @@ define(['jquery',
             },
 
             back: function(){
-                Backbone.history.navigate('/', true);
+                Backbone.history.navigate('/', {trigger:true, replace: false});
             },
 
             gotoIn: function(){
@@ -504,7 +504,7 @@ define(['jquery',
                     that.addUtil(false);
                 };
 
-                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + '/pre', false);
+                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + '/pre', {trigger:true, replace: true});
 
                 return this;
             }
@@ -586,7 +586,7 @@ define(['jquery',
             },
 
             back: function(){
-                Backbone.history.navigate('/', true);
+                Backbone.history.navigate('/', {trigger:true, replace: false});
             },
 
             gotoPre: function(){
@@ -805,7 +805,7 @@ define(['jquery',
 
                 this.$('#mid').droppable({drop: this.addedToken});
 
-                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + '/in', false);
+                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + '/in', {trigger:true, replace: true});
 
                 return this;
             },
@@ -966,7 +966,7 @@ define(['jquery',
             },
 
             back: function(){
-                Backbone.history.navigate('/', true);
+                Backbone.history.navigate('/', {trigger:true, replace: false});
             },
 
             gotoPre: function(){
@@ -1024,7 +1024,7 @@ define(['jquery',
 
                 this.$el.html(this.template({game: this.model.toJSON(), moment: moment}));
 
-                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + '/pos', false);
+                Backbone.history.navigate('/games/' + (this.model.get('sid') && this.model.get('sid')!='new'?this.model.get('sid'):this.model.id) + '/pos', {trigger:true, replace: true});
 
                 return this;
             },
