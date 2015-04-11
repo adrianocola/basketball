@@ -54,7 +54,7 @@ if(app.get('env')==="development"){
     app.use(express.logger('dev'));
 }
 
-app.set('port', process.env.PORT || 4594);
+app.set('port', process.env.PORT || 4595);
 app.set('views',__dirname + '/views');
 app.set('view engine', 'jade');
 app.use(stylus.middleware({ src: __dirname + '/public', compile: compile_nib}));

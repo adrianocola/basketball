@@ -4,7 +4,7 @@
     <div id="commonErrorMsg"><%= options.msg?options.msg:"" %></div>
     <div id="commonErrorButtons">
         <%if(options.action==="login"){%>
-        <a href="/login"><button class="buttonOrange selected">Página de Login</button></a>
+        <a href="/logout"><button class="buttonOrange selected">Página de Login</button></a>
         <%}else if(options.action==="refresh"){%>
         <a href=""javascript:history.go(0);""><button class="buttonOrange selected">Atualizar Página</button></a>
         <%}else if(options.action==="none"){%>

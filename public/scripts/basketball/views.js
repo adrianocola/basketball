@@ -60,25 +60,14 @@ define(['jquery',
 
                 var user = new Models.UserModel({online: basketball.online});
 
-                if(basketball.online){
-                    user.getUser({success: function(){
+                user.fetch({success: function(){
 
-                        window.localStorage.setItem("user",JSON.stringify(user.toJSON()));
-
-                        that.model = user;
-                        basketball.userModel = user;
-
-                        that.render();
-                    }});
-                }else{
-
-                    user.set(JSON.parse(window.localStorage.getItem("user")));
-
-                    this.model = user;
+                    that.model = user;
                     basketball.userModel = user;
 
-                    this.render();
-                }
+                    that.render();
+                }});
+
 
             },
 

@@ -19,8 +19,6 @@ define(['jquery',
 
             _.bindAll(this);
 
-            //this.storage = new Offline.Storage('user', this, {autoPush: basketball.online?true:false});
-
         },
 
         defaults: {
@@ -31,31 +29,43 @@ define(['jquery',
             $.ajax('/api/user/logout',options);
         },
 
-        getUser: function(options){
+        fetch: function(options){
 
-            var that = this;
+            options = options || {};
+            options.silent = true;
 
-            var success = options.success;
-            var error = options.error;
+            var originalSuccess = options.success;
 
-            options.success = function(data,text,xhr){
+            options.success = function(model){
 
-                that.set(data,{silent: true});
+                window.localStorage.setItem("user",JSON.stringify(model.toJSON()));
 
-                if(success){
-                    success(that,data,options);
+                if(originalSuccess){
+                    originalSuccess(model);
                 }
             }
 
-            options.error = function(xhr,text,error){
+            if(basketball.online){
+                Backbone.Model.prototype.fetch.call(this,options);
+            }else{
 
-                if(error){
-                    success(that,xhr,options);
+                this.set(JSON.parse(window.localStorage.getItem("user")));
+
+                if(originalSuccess){
+                    originalSuccess(this);
                 }
-
             }
 
-            $.ajax('/api/user/data',options);
+        },
+
+        save: function(atts,opts) {
+
+            if(basketball.online){
+                Backbone.Model.prototype.save.call(this,atts,opts);
+            }else{
+                window.localStorage.setItem("user",JSON.stringify(this.toJSON()));
+            }
+
 
         }
 
