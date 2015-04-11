@@ -10,13 +10,13 @@ app.get('/api/games', app.utils.verifyAuthorization, function(req, res, next){
 
         _.each(games,function(game){
             game._doc.id = game._doc._id;
+            game._doc.sid = game._doc._id;
             delete game._doc._id;
         });
 
         res.json(games);
 
     });
-
 
 });
 
@@ -30,6 +30,7 @@ app.post('/api/games', app.utils.verifyAuthorization, function(req, res, next){
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
         game._doc.id = game._doc._id;
+        game._doc.sid = game._doc._id;
         delete game._doc._id;
 
         res.json(game);
@@ -43,11 +44,12 @@ app.post('/api/games', app.utils.verifyAuthorization, function(req, res, next){
 app.put('/api/games/:id', app.utils.verifyAuthorization, function(req, res, next){
 
 
-    app.models.Game.findOneAndUpdate({_id: req.params.id, user: req.session.userId},{$set: req.body},function(err,game){
+    app.models.Game.findOneAndUpdate({_id: req.params.id, user: req.session.userId},{$set: req.body},{new: true},function(err,game){
 
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
         game._doc.id = game._doc._id;
+        game._doc.sid = game._doc._id;
         delete game._doc._id;
 
         res.json(game);
@@ -72,6 +74,7 @@ app.delete('/api/games/:id', app.utils.verifyAuthorization, function(req, res, n
                 if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
                 game._doc.id = game._doc._id;
+                game._doc.sid = game._doc._id;
                 delete game._doc._id;
 
                 res.json(game);
@@ -117,6 +120,17 @@ app.get('/app.html', function(req, res, next){
     }
 
 });
+
+app.get('/', function(req, res, next){
+
+    if(req.session && req.session.userId){
+        res.render('main', {env: app.env });
+    }else{
+        res.redirect('/login');
+    }
+
+});
+
 
 
 app.get('*', function(req, res, next){

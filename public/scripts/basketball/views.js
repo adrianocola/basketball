@@ -246,7 +246,6 @@ define(['jquery',
                     if(!this.model){
                         this.model = this.collection.get(this.gameId);
                     }
-
                 }
 
                 this.current_view = null;
