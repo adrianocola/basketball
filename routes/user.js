@@ -170,67 +170,40 @@ app.post("/api/user/signup", function(req, res, next){
 
     if(req.body.password == undefined || req.body.password == "") reqsError += "Senha é obrigatório. ";
 
-    if(req.body.key == undefined || req.body.key == "") reqsError += "Chave de acesso é obrigatória ";
-
-
     if(reqsError.length > 0){
         res.send(400,reqsError);
         return;
     }
 
-    app.models.Key.find({},function(err,keys){
+    var user = new app.models.User();
 
-        var key = keys[0];
+    user.password = req.body.password;
+    user.last_login = new Date();
+    user.email = req.body.email.toLowerCase();
 
-        if(!key){
-            res.send(500,"Não é possível realizar cadastro pois não existem chaves de acesso disponíveis!");
-            return;
-        }
+    //save user
+    user.save( function(err){
 
-        if(!u.contains(key.keys,req.body.key)){
-            res.send(500,"Chave de acesso inválida!");
-            return;
-        }
-
-        //remove a key da lista de keys
-        key.keys = u.without(key.keys,req.body.key);
-        key.save();
-
-
-        var user = new app.models.User();
-
-        user.password = req.body.password;
-        user.key = req.body.key;
-        user.last_login = new Date();
-        user.email = req.body.email.toLowerCase();
-
-        //save user
-        user.save( function(err){
-
-            if(err){
-                if(err.code == 11000){
-                    res.send(500,"E-mail já cadastrado");
-                }else{
-                    console.log(err);
-                    res.send(500,"Não foi possível realizar cadastro");
-                }
-
-                return;
-
+        if(err){
+            if(err.code == 11000){
+                res.send(500,"E-mail já cadastrado");
+            }else{
+                console.log(err);
+                res.send(500,"Não foi possível realizar cadastro");
             }
 
-            req.session.userId = user._id;
-            req.session.userEmail = user.email;
+            return;
 
-            console.log('Criado user ' + user._id + ' com e-mail: ' + user.email + " usando a key: " + user.key);
+        }
 
-            res.json(user);
+        req.session.userId = user._id;
+        req.session.userEmail = user.email;
 
-        });
+        console.log('Criado user ' + user._id + ' com e-mail: ' + user.email);
+
+        res.json(user);
 
     });
-
-
 
 
 });

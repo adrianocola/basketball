@@ -29,7 +29,6 @@ html
                     $('#error').hide();
 
                     var email = $('#email').val().toLowerCase();
-                    var key = $('#key').val();
                     var password = $('#password').val();
                     var password_confirm = $('#password_confirm').val();
 
@@ -42,10 +41,6 @@ html
                     }
                     if(!email || email.length === 0){
                         missing.push('e-mail');
-                    }
-
-                    if(!key || key.length === 0){
-                        missing.push('chave de acesso');
                     }
 
                     if(missing.length>0){
@@ -75,7 +70,7 @@ html
                         type: "POST",
                         cache: false,
                         contentType: "application/json",
-                        data: '{"email":"' + email + '", "key":"' + key + '", "password":"' +  md5.hex_md5(email + $.trim($("#salt").html()) + password) + '"}',
+                        data: '{"email":"' + email + '", "password":"' +  md5.hex_md5(email + $.trim($("#salt").html()) + password) + '"}',
                         url: "/api/user/signup",
                         success: function(msg){
                             window.localStorage.setItem("user",email);
@@ -111,7 +106,6 @@ html
         div#security
             h2 Criar Conta
             input#email(type="text",placeholder="e-mail")
-            input#key(type="text",placeholder="chave de acesso")
             input#password(type="password",placeholder="senha")
             input#password_confirm(type="password",placeholder="confirmar senha")
             br
