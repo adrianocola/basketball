@@ -157,6 +157,10 @@ define(['jquery',
                     return this.$("#change_password_msg").html("Nova senha não foi repetida corretamente!");
                 }
 
+                if(basketball.offline){
+                    return this.$("#change_password_msg").html("Não é possível alterar senha no modo offline!");
+                }
+
                 $.ajax({
                     cache: false,
                     url: "/api/nonce"
