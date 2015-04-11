@@ -43,6 +43,7 @@ app.post('/api/games', app.utils.verifyAuthorization, function(req, res, next){
 
 app.put('/api/games/:id', app.utils.verifyAuthorization, function(req, res, next){
 
+    console.log(req.body);
 
     app.models.Game.findOneAndUpdate({_id: req.params.id, user: req.session.userId},{$set: req.body},{new: true},function(err,game){
 

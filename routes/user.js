@@ -104,8 +104,6 @@ app.get("/api/user/data", app.utils.verifyAuthorization, function(req, res, next
 
             delete user._doc.password;
 
-            console.log(user);
-
             res.json(user);
         });
 

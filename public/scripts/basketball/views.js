@@ -3,6 +3,7 @@ define(['jquery',
     'underscore',
     'backbone',
     'md5',
+    'velocity',
     'Models',
     'moment',
     'Utils',
@@ -22,6 +23,7 @@ define(['jquery',
              _,
              Backbone,
              md5,
+             velocity,
              Models,
              moment,
              Utils,
@@ -434,6 +436,8 @@ define(['jquery',
 
             render: function(where){
 
+                console.log("RENDER DETAILS");
+
                 //se ainda não foi salvo no server não exibe o jogo ainda
                 if(basketball.online && this.model.get('sid') === "new"){
                     return this;
@@ -793,11 +797,6 @@ define(['jquery',
                 var my = ui.draggable.hasClass('my');
 
                 var play = 'circle';
-                if(ui.draggable.hasClass('token_square')){
-                    play = 'square';
-                }else if(ui.draggable.hasClass('token_circle')){
-                    play = 'circle';
-                }
 
                 var player = my?this.model.get('mTeam')[pid]:this.model.get('oTeam')[pid];
 
@@ -836,6 +835,7 @@ define(['jquery',
                     var shot =  playerShots[sid];
                     shot.x = x;
                     shot.y = y;
+                    shot.updated = Utils.now();
                 }
 
                 //salva o shots
@@ -878,8 +878,10 @@ define(['jquery',
                             var shot = player[shotView.options.sid];
                             if(shot){
                                 mShotsMap[shotView.options.pid + ':' + shotView.options.sid] = true;
-                                if(shotView.$el.css('left')!= shot.x || shotView.$el.css('top')!= shot.y){
-                                    shotView.$el.animate({left: shot.x, top: shot.y});
+                                if(shot.updated > shotView.shot.updated){
+                                    shotView.shot = shot;
+                                    shotView.$el.velocity({left: shot.x, top: shot.y});
+                                    shotView.updateFormat();
                                 }
                                 newMShots.push(shotView);
                             }else{
@@ -927,9 +929,12 @@ define(['jquery',
                         if(player){
                             var shot = player[shotView.options.sid];
                             if(shot){
+
                                 oShotsMap[shotView.options.pid + ':' + shotView.options.sid] = true;
-                                if(shotView.$el.css('left')!= shot.x || shotView.$el.css('top')!= shot.y){
-                                    shotView.$el.animate({left: shot.x, top: shot.y});
+                                if(shot.updated > shotView.shot.updated){
+                                    shotView.shot = shot;
+                                    shotView.$el.velocity({left: shot.x, top: shot.y});
+                                    shotView.updateFormat();
                                 }
                                 newOShots.push(shotView);
                             }else{
@@ -950,7 +955,7 @@ define(['jquery',
 
                             if(!oShotsMap[pid + ':' + sid]){
 
-                                var shotView = new PlayerToken({model: that.model, player: playerView.player, pid: pid, shot: shot, sid: sid, my: false, pos: that.oViews.length - i -1, drag: true});
+                                var shotView = new PlayerToken({model: that.model, player: playerView.player, pid: pid, shot: shot, sid: sid, my: false, pos: that.oViewsCircle.length - i -1, drag: true});
                                 newOShots.push(shotView);
 
                                 that.$('#mid').append(shotView.render().el);
@@ -997,24 +1002,15 @@ define(['jquery',
                 var game = this.model.toJSON();
 
                 this.mViewsCircle = [];
-                this.mViewsSquare = [];
                 this.oViewsCircle = [];
-                this.oViewsSquare = [];
 
                 this.$('.team.mTeam .circle').html('');
-                this.$('.team.mTeam .square').html('');
                 this.$('.team.oTeam .circle').html('');
-                this.$('.team.oTeam .square').html('');
 
 
                 _.each(game.mTeam,function(player,key){
                     var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'circle', my: true, drag: true});
                     that.mViewsCircle.push(playerView);
-                });
-
-                _.each(game.mTeam,function(player,key){
-                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'square', my: true, drag: true});
-                    that.mViewsSquare.push(playerView);
                 });
 
                 //mostra a lista de jogadores de forma ordenada
@@ -1024,20 +1020,9 @@ define(['jquery',
                     playerView.paint(i);
                 });
 
-                this.mViewsSquare = this.mViewsSquare.sort(function(a, b) {return a.player.num - b.player.num});
-                _.each(this.mViewsSquare,function(playerView,i){
-                    that.$('.team.mTeam .square').append(playerView.render().el);
-                    playerView.paint(i);
-                });
-
                 _.each(game.oTeam,function(player,key){
                     var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'circle', my: false, drag: true});
                     that.oViewsCircle.push(playerView);
-                });
-
-                _.each(game.oTeam,function(player,key){
-                    var playerView = new PlayerToken({model: that.model, player: player, pid: key, play: 'square', my: false, drag: true});
-                    that.oViewsSquare.push(playerView);
                 });
 
                 //mostra a lista de jogadores de forma ordenada
@@ -1045,13 +1030,6 @@ define(['jquery',
                 _.each(this.oViewsCircle,function(playerView,i){
                     that.$('.team.oTeam .circle').append(playerView.render().el);
                     playerView.paint(that.oViewsCircle.length-i-1);
-                });
-
-                //mostra a lista de jogadores de forma ordenada
-                this.oViewsSquare = this.oViewsSquare.sort(function(a, b) {return b.player.num - a.player.num});
-                _.each(this.oViewsSquare,function(playerView,i){
-                    that.$('.team.oTeam .square').append(playerView.render().el);
-                    playerView.paint(that.oViewsSquare.length-i-1);
                 });
 
             },
@@ -1331,6 +1309,33 @@ define(['jquery',
                 }else if(this.shot){
                     $('.token.selected').removeClass('selected');
                     this.$el.addClass('selected');
+
+                    if(this.options.drag && !this.dragged) {
+                        if (this.$el.hasClass('token_square')) {
+                            this.$el.removeClass('token_square');
+                            this.$el.addClass('token_circle');
+                            this.shot.play = "circle";
+                        } else if (this.$el.hasClass('token_circle')) {
+                            this.$el.removeClass('token_circle');
+                            this.$el.addClass('token_diamond');
+                            this.shot.play = "diamond";
+                        } else if (this.$el.hasClass('token_diamond')) {
+                            this.$el.removeClass('token_diamond');
+                            this.$el.addClass('token_paralel');
+                            this.shot.play = "paralel";
+                        } else if (this.$el.hasClass('token_paralel')) {
+                            this.$el.removeClass('token_paralel');
+                            this.$el.addClass('token_square');
+                            this.shot.play = "square";
+                        }
+
+                        this.shot.updated = Utils.now();
+
+                        this.model.save();
+                    }
+
+                    this.dragged = false;
+
                 }
 
             },
@@ -1342,15 +1347,15 @@ define(['jquery',
                 if(side){
                     if(this.options.my){
                         if(this.shot.x > 460){
-                            this.$el[animate?"animate":"css"]({left: this.shot.x-2*(this.shot.x-460) +8, top: 518 - this.shot.y - 32},1000);
+                            this.$el[animate?"velocity":"css"]({left: this.shot.x-2*(this.shot.x-460) +8, top: 518 - this.shot.y - 32},1000);
                         }
                     }else{
                         if(this.shot.x < 460){
-                            this.$el[animate?"animate":"css"]({left: 460 + (460-this.shot.x) + 8, top: 518 - this.shot.y - 32},1000);
+                            this.$el[animate?"velocity":"css"]({left: 460 + (460-this.shot.x) + 8, top: 518 - this.shot.y - 32},1000);
                         }
                     }
                 }else{
-                    this.$el[animate?"animate":"css"]({left: this.shot.x, top: this.shot.y},1000);
+                    this.$el[animate?"velocity":"css"]({left: this.shot.x, top: this.shot.y},1000);
                 }
 
             },
@@ -1389,7 +1394,19 @@ define(['jquery',
                 this.$el.addClass('color'+this.options.pos);
             },
 
+            updateFormat: function(){
+
+                this.$el.removeClass('token_square');
+                this.$el.removeClass('token_circle');
+                this.$el.removeClass('token_diamond');
+                this.$el.removeClass('token_paralel');
+
+                this.$el.addClass('token_'+ (this.shot.play || 'circle'));
+            },
+
             render: function(){
+
+                var that = this;
 
                 this.$el.html(this.template({player: this.player, my: this.options.my, moment: moment}));
 
@@ -1400,22 +1417,10 @@ define(['jquery',
                 }
 
                 if(!this.shot){
-                    if(this.options.play==="square"){
-                        this.$el.addClass('token_square');
-                    }else if(this.options.play==="circle"){
-                        this.$el.addClass('token_circle');
-                    }else{
-                        this.$el.addClass('token_circle');
-                    }
+                    this.$el.addClass('token_'+ (this.options.play || 'circle'));
                 }else{
-                    if(this.shot.play==="square"){
-                        this.$el.addClass('token_square');
-                    }else if(this.shot.play==="circle"){
-                        this.$el.addClass('token_circle');
-                    }else{
-                        this.$el.addClass('token_circle');
-                    }
-                }
+                    this.$el.addClass('token_'+ (this.shot.play || 'circle'));
+                  }
 
                 if(this.options.pid){
                     this.$el.attr('data-pid',this.options.pid);
@@ -1431,7 +1436,14 @@ define(['jquery',
                 }
 
                 if(this.options.drag){
-                    this.$el.draggable({ revert: this.shot?false:true, containment: this.shot?"parent":undefined });
+                    this.$el.draggable({
+                        revert: this.shot?false:true,
+                        containment: this.shot?"parent":undefined,
+                        start: function(){
+                            $('.token.selected').removeClass('selected');
+                            that.dragged = true;
+                        }
+                    });
                 }
 
                 if(this.options.pos != undefined){
