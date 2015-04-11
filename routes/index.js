@@ -1,6 +1,5 @@
 var app = require('../app')
-    ,  fs = require('fs')
-    ,  u = require('underscore');
+    ,  _ = require('lodash');
 
 
 app.get('/api/games', app.utils.verifyAuthorization, function(req, res, next){
@@ -9,7 +8,7 @@ app.get('/api/games', app.utils.verifyAuthorization, function(req, res, next){
 
         if(err){ next(new app.errors.UnexpectedError(err)); return; }
 
-        u.each(games,function(game){
+        _.each(games,function(game){
             game._doc.id = game._doc._id;
             delete game._doc._id;
         });

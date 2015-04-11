@@ -1,7 +1,4 @@
 var app = require(__dirname + '/../app');
-var u = require('underscore');
-var crypto = require('crypto');
-
 
 function clearAuthorization(req, res){
 
